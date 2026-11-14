@@ -1,0 +1,54 @@
+# Python e ferramentas
+.venv/
+.uv-cache/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage*
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Configuração local, chaves e credenciais
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+**/credentials*
+**/secrets/
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
+
+# Dados locais e saídas
+.local/
+artifacts/
+data/inbox/
+data/private/
+data/annotations/
+data/cache/
+data/derived/
+data/results/
+*.age
+*.tmp
+*.bak
+*.part
+*.crdownload
+*.log
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Lista de permissões para os documentos brutos.
+# O verificador do manifesto também rejeita arquivos rastreados fora desta lista.
+/data/raw/*
+!/data/raw/*/
+/data/raw/*/*
+!/data/raw/*/original.html
+!/data/raw/*/conferencia.pdf
+!/data/raw/*/original.xml
