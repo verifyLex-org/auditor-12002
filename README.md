@@ -52,3 +52,142 @@ flowchart LR
   DB --> RD --> VF
   VF -->|aprovado| UI
   VF -->|reprovado| DB
+
+```
+
+* **Motor de aplicabilidade antes da detecção:** separa falhas de escopo/exceção (`NAO_APLICAVEL`) e falhas de extração (`NAO_AVALIAVEL`) antes de acionar qualquer checker.
+* **Dupla fonte concordante:** regras sensíveis a tipografia e aspas só emitem `ACHADO` quando confirmadas simultaneamente na fonte primária (HTML) e no PDF oficial de conferência.
+* **Isolamento contra *prompt injection* indireto:** a linguagem imperativa dos atos (`"deverá"`, `"fica vedado"`) é preservada por ser objeto da auditoria. O texto do ato entra no LLM marcado via *spotlighting/datamarking*, com o modelo (`qwen3:8b` via Ollama) em rede Docker sem acesso à internet (`internal: true`), sem ferramentas e restrito a JSON Schema.
+* **Determinismo e auditoria matemática:** chamadas ao LLM passam por um *ledger* idempotente no PostgreSQL (`llm_cache`) indexado por hash do modelo, digest, prompt, parâmetros, manifesto do corpus e commit Git. Todo número exibido em relatórios é recomputado por views SQL e validado após a renderização final.
+
+---
+
+## Catálogo das 6 Regras Auditáveis
+
+Todas as regras referem-se ao **Decreto nº 12.002, de 22 de abril de 2024** (vigência a partir de 1º/06/2024, art. 78):
+
+| ID / Versão | Regra | Fundamento | Exceção / Escopo | Execução |
+| --- | --- | --- | --- | --- |
+| `R1@1.0` | Cláusula de vigência expressa e em forma prevista | Art. 16, *caput*; art. 18, I–IV e parágrafo único | Aplica-se a todo ato do corpus | Determinística |
+| `R2@1.0` | Vedação da revogação genérica (`"revogam-se as disposições em contrário"`) | Art. 15, §1º | Ocorrências dentro de blocos citados de outro ato não contam | Determinística |
+| `R3@1.0` | Numeração ordinal até o 9º e cardinal com ponto a partir do 10º (`Art. 10.`) | Art. 12, I, "a"/"b", V e VI, "a"/"b" | Ignora dispositivos em blocos de alteração; valida sufixo `-A` (art. 14, par. único) | Determinística (dupla fonte) |
+| `R4@1.0` | Vedação de enunciados iniciados por `"considerando"` | Art. 4º, §3º | **Exceção explícita:** decretos de promulgação de atos internacionais | Determinística |
+| `R5@1.0` | Técnica de alteração: fórmula padrão, aspas e `"(NR)"` | Art. 14, I e VII | Somente atos que alteram outros atos | Determinística + LLM delimitado |
+| `R6@1.0` | Indicação de objeto e âmbito de aplicação nos primeiros dispositivos | Art. 6º, *caput* | **Exceção explícita:** atos meramente alteradores ou revogadores (art. 6º, par. único) | LLM delimitado + verificador |
+
+---
+
+## Corpus Fechado e Integridade (`data/`)
+
+O corpus é composto por **70 atos normativos federais** publicados após **01/06/2024** (art. 78) no âmbito da administração pública federal direta, autárquica e fundacional (art. 2º), divididos em **60 atos de teste** (360 decisões `ato × regra`) e **10 atos de desenvolvimento**:
+
+* **Estratificação do conjunto de teste (60 atos):** 12 decretos numerados, 3 decretos de promulgação de atos internacionais, 18 portarias ministeriais, 20 portarias/instruções normativas de autarquias e fundações e 7 resoluções de colegiados.
+* **Preservação imutável:** cada ato é armazenado em `data/raw/{ato_id}/` com fonte primária (`HTML`), conferência (`PDF` oficial do DOU), `XML` (quando disponível) e metadados de proveniência, protegidos por `data/manifesto.csv` e `data/MANIFEST.sha256`. O CI bloqueia qualquer Pull Request que altere o manifesto ou o gabarito `gold-v1.csv` após seu congelamento.
+
+---
+
+## Protocolo Experimental (`D / A / B / C`)
+
+As hipóteses, desfechos, critérios de corte e regras de parada estão congelados em `PREREGISTRO.md`. O experimento compara 4 condições sobre as mesmas **360 decisões reais** e **120 mutações sintéticas controladas** (20 por regra):
+
+| Condição | Descrição | LLM | Recuperação | Aplicabilidade | Verificadores |
+| --- | --- | --- | --- | --- | --- |
+| **D** | Baseline determinístico (regras + SQL; abstenção/heurística em R5/R6) | Não | — | Sim | Integridade |
+| **A** | LLM *zero-shot* (`qwen3:8b`, texto do ato + artigo da regra) | Sim | Nenhuma | Não | Apenas schema |
+| **B** | LLM + recuperação lexical BM25 (`bm25s`, variante Lucene, `k1=1.2, b=0.75`) | Sim | BM25 (top-5) | Não | Apenas schema |
+| **C** | **Pipeline completo** (aplicabilidade + checkers + LLM delimitado + verificadores) | Sim (R5/R6) | BM25 (top-5) | Sim | Integridade + predicado + final |
+
+* **Métricas e rigor estatístico:** precisão de `ACHADO` (desfecho primário), *recall* em mutações sintéticas, acurácia em exceções (`NAO_APLICAVEL`), cobertura, risco seletivo, concordância inter-anotadores ($\kappa$ de Cohen por regra antes da adjudicação), intervalos de confiança de Wilson (95%), *bootstrap* agrupado por ato e teste exato de McNemar.
+
+*(Tabela de resultados experimentais será preenchida após a execução da suíte congelada `gold-v1`.)*
+
+---
+
+## Como Executar (100% Offline)
+
+### Pré-requisitos
+
+* Docker e Docker Compose
+* Python 3.12+ e [`uv`](https://docs.astral.sh/uv/) (para execução local fora de container)
+* GPU com >= 12 GB de VRAM recomendada para inferência local via Ollama (`qwen3:8b`)
+
+### Subindo o ambiente completo
+
+```bash
+# 1. Clonar o repositório
+git clone [https://github.com/verifyLex-org/auditor-12002.git](https://github.com/verifyLex-org/auditor-12002.git)
+cd auditor-12002
+
+# 2. Verificar integridade criptográfica do corpus
+make verify-manifest
+
+# 3. Subir PostgreSQL 17, Ollama (rede interna isolada) e Streamlit
+docker compose up -d
+
+# 4. Baixar o modelo local uma única vez (após este passo, o sistema opera sem internet)
+docker compose exec ollama ollama pull qwen3:8b
+
+```
+
+Acesse a interface analítica em `http://localhost:8501`.
+
+### Comandos úteis (`Makefile`)
+
+```bash
+make setup            # Instala dependências via uv
+make lint             # Executa ruff check, ruff format --check e mypy
+make test             # Roda suíte unitária, casos difíceis e E2E (sem GPU)
+make test-sec         # Roda bateria de 12 ataques de prompt injection indireto
+make verify-manifest  # Valida SHA-256 de todos os arquivos em data/raw/
+make reproduce        # Reproduz tabelas e métricas a partir do llm_cache
+
+```
+
+---
+
+## Estrutura do Repositório
+
+```text
+auditor-12002/
+├── PREREGISTRO.md            # Hipóteses, métricas, critérios de corte e portões congelados
+├── docker-compose.yml        # PostgreSQL 17 + Ollama (internal: true) + Streamlit
+├── pyproject.toml            # Dependências fixadas e configuração de linters/testes
+├── Makefile                  # Automação de verificação, testes e reprodutibilidade
+├── data/
+│   ├── raw/                  # Atos normativos brutos (somente leitura)
+│   ├── manifesto.csv         # Inventário de arquivos e hashes SHA-256
+│   ├── MANIFEST.sha256       # Hash mestre do corpus
+│   └── gold/                 # Guia de anotação, anotações cegas e gold-v1.csv congelado
+├── domain/                   # Contratos de dados e invariantes em Pydantic v2
+├── parser/                   # Segmentação hierárquica e detector de dupla fonte
+├── rules/                    # Motor de aplicabilidade e checkers determinísticos R1–R5
+├── retrieval/                # Indexação e busca lexical exata com bm25s
+├── llm/                      # Cliente Ollama estruturado e isolamento via datamarking
+├── pipeline/                 # CLI typer, cache idempotente (llm_cache) e condições D/A/B/C
+├── verify/                   # Verificadores de integridade, suporte, métricas SQL e relatório final
+├── eval/                     # Cálculo de kappa, gerador de mutações, Wilson, bootstrap e McNemar
+├── sql/                      # Schema relacional e views analíticas de fechamento
+├── app/                      # Dashboard interativo em Streamlit
+├── tests/                    # Testes unitários, hard_cases, security (injection) e e2e
+└── docs/                     # ADRs, DATA_CARD.md, MODEL_CARD.md, FINOPS.md e DEMO.md
+
+```
+
+---
+
+## Trabalhos Relacionados e Limitações
+
+* **Posicionamento técnico:** a codificação de regras estruturais de articulação legislativa possui precedentes consolidados no ecossistema brasileiro — como o *Editor de Textos Articulados (LexML ETA)* e validadores legislativos estaduais — e na literatura internacional (Höfler & Sugisaki, 2012; Akoma Ntoso; *xmLegesEditor*). A contribuição deste projeto não reside na invenção de regras sintáticas, mas na **avaliação empírica controlada pós-publicação sob o Decreto nº 12.002/2024**, combinando aplicabilidade explícita em 4 estados, abstenção determinística e comparação experimental (`D/A/B/C`) sobre redução de falsos positivos.
+* **Limitações declaradas:**
+1. A auditoria opera sobre **atos já publicados** (proxy público), não sobre minutas internas em tramitação.
+2. A baixa prevalência natural de erros formais em decretos revisados implica intervalos de confiança amplos em amostras de 60 atos; por essa razão, o *recall* é medido separadamente sobre mutações sintéticas controladas sem inferir prevalência real a partir delas.
+
+
+
+---
+
+## Autores e Licença
+
+Desenvolvido por **Pedro Henrique Pereira Santos** e **João Victor Pereira Santos** (`verifyLex-org`).
+
+Código distribuído sob licença **MIT** (veja `LICENSE`). Os textos normativos em `data/raw/` são atos oficiais públicos nos termos do art. 8º, IV, da Lei nº 9.610/1998.
