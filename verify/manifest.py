@@ -3,6 +3,7 @@ import csv
 import hashlib
 import io
 import re
+import shutil
 import subprocess
 from pathlib import PurePosixPath
 
@@ -10,20 +11,26 @@ CSV = "data/manifesto.csv"
 SUMS = "data/MANIFEST.sha256"
 GOLD = "data/gold/gold-v1.csv"
 SPLIT = "data/splits/split-v1.csv"
-RAW = re.compile(
-    r"data/raw/([A-Za-z0-9_-]+)/(original\.html|conferencia\.pdf|original\.xml)"
-)
+RAW = re.compile(r"data/raw/([A-Za-z0-9_-]+)/(original\.html|conferencia\.pdf|original\.xml)")
 HEADER = ("ato_id", "path", "source_url")
+git_path = shutil.which("git")
+if git_path is None:
+    raise RuntimeError("Git não encontrado no PATH")
+GIT: str = git_path
 
 
 def git(*args: str) -> bytes:
-    return subprocess.check_output(["git", *args])
+    # Argumentos internos em lista, sem interpretação por shell.
+    return subprocess.check_output([GIT, *args])  # noqa: S603
 
 
 def exists(spec: str) -> bool:
-    result = subprocess.run(
-        ["git", "cat-file", "-e", spec], stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL, check=False,
+    # A referência é um argumento de cat-file, sem interpretação por shell.
+    result = subprocess.run(  # noqa: S603
+        [GIT, "cat-file", "-e", spec],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        check=False,
     )
     return result.returncode == 0
 
@@ -34,17 +41,44 @@ def blob(spec: str) -> bytes:
 
 def hashes(paths: set[str], ref: str) -> bytes:
     return "".join(
-        f"{hashlib.sha256(blob(f'{ref}:{path}')).hexdigest()}  {path}\n"
-        for path in sorted(paths)
+        f"{hashlib.sha256(blob(f'{ref}:{path}')).hexdigest()}  {path}\n" for path in sorted(paths)
     ).encode("ascii")
 
 
 def check(base: str | None, stage: bool, print_hashes: bool) -> None:
     ref = "" if stage else "HEAD"
-    files = set(git("ls-files", "-z" if stage else "--cached").decode().split("\0")) if stage else (
-        set(git("ls-tree", "-r", "--name-only", "-z", ref).decode().split("\0"))
+    files = (
+        set(git("ls-files", "-z" if stage else "--cached").decode().split("\0"))
+        if stage
+        else (set(git("ls-tree", "-r", "--name-only", "-z", ref).decode().split("\0")))
     )
     raw_files = {path for path in files if path.startswith("data/raw/")}
+
+    if not blob(f"{ref}:{CSV}"):
+        placeholders = {
+            f"data/raw/{{ato_id}}/{name}"
+            for name in ("original.html", "conferencia.pdf", "original.xml")
+        }
+        scaffold_files = {CSV, SUMS, GOLD, SPLIT, *placeholders}
+        anchors = ("refs/tags/corpus-v1", "refs/tags/gold-v1", base)
+        if (
+            raw_files != placeholders
+            or any(blob(f"{ref}:{path}") for path in scaffold_files)
+            or any(
+                anchor
+                and any(
+                    exists(f"{anchor}:{path}") and blob(f"{anchor}:{path}")
+                    for path in (CSV, SUMS, GOLD, SPLIT)
+                )
+                for anchor in anchors
+            )
+            or exists("refs/tags/corpus-v1")
+            or exists("refs/tags/gold-v1")
+        ):
+            raise ValueError("Manifesto vazio permitido apenas no scaffold inicial do corpus")
+        if not print_hashes:
+            print("Corpus ainda não coletado: scaffold vazio verificado.")
+        return
 
     with io.StringIO(blob(f"{ref}:{CSV}").decode("utf-8"), newline="") as stream:
         rows = csv.DictReader(stream, strict=True)
