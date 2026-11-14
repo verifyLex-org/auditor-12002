@@ -22,7 +22,7 @@
 
   /* Estados explícitos da máquina de decisão */
   --vlx-state-conforme: #246a47;
-  --vlx-state-achado: #b45309;
+  --vlx-state-achado: #92400e;
   --vlx-state-nao-aplicavel: #4b5563;
   --vlx-state-nao-avaliavel: #4338ca;
 
@@ -70,7 +70,7 @@
   --vlx-state-conforme: #5cc28c;
   --vlx-state-achado: #f59e0b;
   --vlx-state-nao-aplicavel: #9ca3af;
-  --vlx-state-nao-avaliavel: #818cf8;
+  --vlx-state-nao-avaliavel: #a5b4fc;
 
   --vlx-surface: #0f2236;
   --vlx-surface-muted: #132b44;
@@ -820,6 +820,13 @@
 
 .md-typeset table:not([class]) tbody tr:hover {
   background-color: color-mix(in srgb, var(--vlx-accent) 7%, transparent);
+}
+
+/* No celular, tabelas largas rolam na horizontal em vez de espremer as colunas. */
+@media (max-width: 44.9375em) {
+  .md-typeset table:not([class]) {
+    min-width: 34rem;
+  }
 }
 
 /* ------------------------------------------------------------------ Admonitions */

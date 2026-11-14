@@ -7,7 +7,7 @@ O **Auditor 12.002** adota uma arquitetura enxuta centrada em **banco único (Po
 ## Topologia e Fluxo de Processamento
 
 ```mermaid
-flowchart LR
+flowchart TB
   subgraph NAO_CONFIAVEL["Dados não confiáveis (somente leitura)"]
     RAW["data/raw/*: HTML + PDF + XML<br/>SHA-256 no manifesto"]
   end

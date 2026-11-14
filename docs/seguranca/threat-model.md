@@ -10,7 +10,7 @@
 4. **Conformidade com a fronteira jurídica (Art. 76):** garantia de que saídas não violem restrições redacionais mesmo sob injeção textual.
 
 ```mermaid
-flowchart LR
+flowchart TB
   UNTRUSTED["Texto do ato (HTML/PDF/XML)<br/>[NÃO CONFIÁVEL]"] -->|Somente leitura + SHA-256| PARSER["Parser + Avaliabilidade<br/>[DETERMINÍSTICO]"]
   PARSER -->|Spotlighting / Datamarking| LLM["Ollama qwen3:8b<br/>[QUARENTENA: rede internal:true, sem tools]"]
   LLM -->|JSON Schema estrito| VERIFY["Verificadores Byte a Byte + Predicado + FINAL<br/>[DETERMINÍSTICO]"]
