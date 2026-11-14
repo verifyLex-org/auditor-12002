@@ -8,34 +8,44 @@ hide:
 <div class="vlx-landing-wrap">
 
 <div class="vlx-hero">
-  <div class="vlx-badges">
-    <span class="vlx-badge">Decreto nº 12.002/2024</span>
-    <span class="vlx-badge">100% offline</span>
-    <span class="vlx-badge">Python 3.12</span>
-    <span class="vlx-badge">Licença MIT</span>
+  <div class="vlx-pills vlx-rv">
+    <span class="vlx-pill">Auditor 12.002</span>
+    <span class="vlx-pill">Decreto nº 12.002/2024</span>
+    <span class="vlx-pill">100% offline</span>
+    <span class="vlx-pill">Python 3.12</span>
+    <span class="vlx-pill">MIT</span>
   </div>
-  <h1 class="vlx-title">Auditor 12.002</h1>
-  <p class="vlx-headline">Revisão auditável de técnica legislativa, com abstenção determinística quando a evidência não basta.</p>
-  <p class="vlx-subheadline">
+  <h1 class="vlx-title vlx-rv" style="animation-delay: 0.08s">Revisão legislativa<br><em>que mostra a prova.</em></h1>
+  <p class="vlx-lead vlx-rv" style="animation-delay: 0.16s">
     Avalia atos normativos federais publicados contra seis regras objetivas do Decreto nº 12.002/2024. Cada veredito aponta sua evidência literal ou declara por que não pôde ser emitido.
   </p>
-  <div class="vlx-cta-group">
-    <a href="operacao/como-rodar/" class="vlx-btn-primary">Começar pelo quickstart</a>
+  <div class="vlx-cta-group vlx-rv" style="animation-delay: 0.24s">
+    <a href="operacao/como-rodar/" class="vlx-btn-primary">Começar pelo quickstart <span class="vlx-arrow">→</span></a>
     <a href="dominio/" class="vlx-btn-secondary">Entender o domínio e as regras</a>
+  </div>
+  <div class="vlx-verdict vlx-rv" style="animation-delay: 0.34s" aria-label="Exemplo ilustrativo do formato de um veredito">
+    <div class="vlx-verdict-bar"><span class="vlx-dot"></span><span class="vlx-dot"></span><span class="vlx-dot"></span><span>veredito · formato ilustrativo</span></div>
+    <div class="vlx-verdict-body">
+      <div><span class="vlx-k">par</span>(ato, R3@1.0)</div>
+      <div><span class="vlx-k">estado</span><span class="vlx-badge vlx-badge--achado">ACHADO</span></div>
+      <div><span class="vlx-k">trecho</span>[trecho literal ancorado]</div>
+      <div><span class="vlx-k">offset</span>[posição no documento]</div>
+      <div><span class="vlx-k">sha256</span>[hash do trecho]<span class="vlx-caret"></span></div>
+    </div>
   </div>
 </div>
 
-<div class="vlx-stat-strip">
+<div class="vlx-stat-strip vlx-reveal vlx-rv">
   <div class="vlx-stat-item">
-    <div class="vlx-stat-number">4</div>
+    <div class="vlx-stat-number vlx-count-4" aria-label="4"></div>
     <div class="vlx-stat-label">Estados mutuamente exclusivos por par (ato, regra)</div>
   </div>
   <div class="vlx-stat-item">
-    <div class="vlx-stat-number">6</div>
+    <div class="vlx-stat-number vlx-count-6" aria-label="6"></div>
     <div class="vlx-stat-label">Regras versionadas, de <code class="vlx-rule">R1@1.0</code> a <code class="vlx-rule">R6@1.0</code></div>
   </div>
   <div class="vlx-stat-item">
-    <div class="vlx-stat-number">70</div>
+    <div class="vlx-stat-number vlx-count-70" aria-label="70"></div>
     <div class="vlx-stat-label">Atos no corpus fechado previsto (60 de teste e 10 de desenvolvimento)</div>
   </div>
   <div class="vlx-stat-item">
@@ -46,20 +56,11 @@ hide:
 
 </div>
 
-!!! info "Estado atual do repositório"
+## Quatro estados, nenhuma falha silenciosa
 
-    | Pronto para uso | Em roadmap |
-    | --- | --- |
-    | Especificação de domínio e fronteira do Art. 76 | Pipeline de execução (`parser/`, `rules/`, `llm/`, `verify/`) |
-    | ADRs 001 a 003 e contratos de dados | Banco PostgreSQL 17 e views (`sql/`) |
-    | Pré-registro experimental (`PREREGISTRO.md`) | Execução das condições D, A, B e C (`pipeline/`, `eval/`) |
-    | CI, governança, pre-commit e portal de documentação | Corpus `data/` e painel Streamlit (`app/`) |
+A abstenção é um resultado válido. Nenhum caminho de erro produz `CONFORME` ou `ACHADO` por acidente.
 
-## Como funciona a decisão
-
-Cada par `(ato, regra)` cai em exatamente um de quatro estados. A abstenção é um resultado válido, não uma falha silenciosa.
-
-<div class="vlx-state-grid">
+<div class="vlx-state-grid vlx-reveal vlx-rv">
   <div class="vlx-state-card vlx-state-card--conforme">
     <span class="vlx-badge vlx-badge--conforme">CONFORME</span>
     <p>Regra aplicável, evidência íntegra e critério atendido.</p>
@@ -78,9 +79,37 @@ Cada par `(ato, regra)` cai em exatamente um de quatro estados. A abstenção é
   </div>
 </div>
 
+## O modelo nunca decide sozinho
+
+Dados não confiáveis entram por um núcleo determinístico. O LLM roda em quarentena e toda saída é verificada byte a byte.
+
+<div class="vlx-zones vlx-reveal vlx-rv">
+  <div class="vlx-zone">
+    <p class="vlx-zone-title">ZONA NÃO CONFIÁVEL</p>
+    <div class="vlx-node"><b>data/raw/*</b>HTML + PDF + XML, SHA-256 no manifesto</div>
+  </div>
+  <div class="vlx-zone vlx-zone--det">
+    <p class="vlx-zone-title">NÚCLEO DETERMINÍSTICO</p>
+    <div class="vlx-node"><b>Parser hierárquico</b>art / § / inciso / alínea</div>
+    <div class="vlx-node"><b>Avaliabilidade e aplicabilidade</b>dupla fonte · escopo · exceções</div>
+    <div class="vlx-node"><b>Checkers R1–R5</b>regras objetivas</div>
+  </div>
+  <div class="vlx-zone vlx-zone--llm">
+    <p class="vlx-zone-title">LLM EM QUARENTENA</p>
+    <div class="vlx-node"><b>Spotlighting / datamarking</b>sem ferramentas, sem rede</div>
+    <div class="vlx-node"><b>Maker R5/R6</b>JSON Schema · temp 0 · seed 42</div>
+  </div>
+  <div class="vlx-zone">
+    <p class="vlx-zone-title">VERIFICAÇÃO</p>
+    <div class="vlx-node"><b>Integridade byte a byte</b>e suporte do predicado</div>
+    <div class="vlx-node"><b>Verificador FINAL</b>sobre o artefato renderizado</div>
+  </div>
+  <span class="vlx-link vlx-link--1"></span><span class="vlx-link vlx-link--2"></span><span class="vlx-link vlx-link--3"></span>
+</div>
+
 ## Escolha seu caminho
 
-<div class="grid cards" markdown>
+<div class="grid cards vlx-reveal vlx-rv" markdown>
 
 -   :material-scale-balance: **[Jurídico e domínio](dominio/index.md)**
 
@@ -115,6 +144,15 @@ Cada par `(ato, regra)` cai em exatamente um de quatro estados. A abstenção é
     - Custos e requisitos de hardware
 
 </div>
+
+!!! info "Estado atual do repositório"
+
+    | Pronto para uso | Em roadmap |
+    | --- | --- |
+    | Especificação de domínio e fronteira do Art. 76 | Pipeline de execução (`parser/`, `rules/`, `llm/`, `verify/`) |
+    | ADRs 001 a 003 e contratos de dados | Banco PostgreSQL 17 e views (`sql/`) |
+    | Pré-registro experimental (`PREREGISTRO.md`) | Execução das condições D, A, B e C (`pipeline/`, `eval/`) |
+    | CI, governança, pre-commit e portal de documentação | Corpus `data/` e painel Streamlit (`app/`) |
 
 !!! note "Independência institucional"
     Projeto independente de código aberto (`verifyLex-org`), desenvolvido sobre atos públicos oficiais (Diário Oficial da União, Câmara dos Deputados e Portal da Legislação). Não possui vínculo, patrocínio ou endosso da Casa Civil, da SAJ ou da Universidade de Brasília (UnB).
