@@ -13,12 +13,12 @@
 /* ------------------------------------------------------------------ Modo claro */
 :root,
 [data-md-color-scheme="default"] {
-  --vlx-navy: #162d47;
-  --vlx-navy-light: #2b4e75;
-  --vlx-navy-dark: #0e1f33;
-  --vlx-amber: #9a4d00;
-  --vlx-amber-border: #d97706;
-  --vlx-accent: #b45309;
+  --vlx-navy: #0d2a44;
+  --vlx-navy-light: #15456b;
+  --vlx-navy-dark: #081c2f;
+  --vlx-amber: #a16207;
+  --vlx-amber-border: #d4a03a;
+  --vlx-accent: #0f766e;
 
   /* Estados explícitos da máquina de decisão */
   --vlx-state-conforme: #246a47;
@@ -45,7 +45,7 @@
   --md-primary-bg-color--light: #ffffffb3;
 
   --md-accent-fg-color: var(--vlx-amber);
-  --md-accent-fg-color--transparent: rgba(154, 77, 0, 0.12);
+  --md-accent-fg-color--transparent: rgba(15, 118, 110, 0.12);
   --md-accent-bg-color: #ffffff;
 
   --md-default-fg-color: #0f172a;
@@ -60,48 +60,48 @@
 
 /* ------------------------------------------------------------------ Modo escuro */
 [data-md-color-scheme="slate"] {
-  --vlx-navy: #0b1220;
-  --vlx-navy-light: #1e293b;
-  --vlx-navy-dark: #070c16;
-  --vlx-amber: #f59e0b;
-  --vlx-amber-border: #f59e0b;
-  --vlx-accent: #f59e0b;
+  --vlx-navy: #0b1a2b;
+  --vlx-navy-light: #12304a;
+  --vlx-navy-dark: #071321;
+  --vlx-amber: #e3a93b;
+  --vlx-amber-border: #e3a93b;
+  --vlx-accent: #2dd4bf;
 
   --vlx-state-conforme: #5cc28c;
   --vlx-state-achado: #f59e0b;
   --vlx-state-nao-aplicavel: #9ca3af;
   --vlx-state-nao-avaliavel: #818cf8;
 
-  --vlx-surface: #111a2c;
-  --vlx-surface-muted: #16213a;
-  --vlx-border: rgba(148, 163, 184, 0.16);
-  --vlx-border-strong: rgba(148, 163, 184, 0.3);
+  --vlx-surface: #0f2236;
+  --vlx-surface-muted: #132b44;
+  --vlx-border: rgba(94, 234, 212, 0.14);
+  --vlx-border-strong: rgba(94, 234, 212, 0.3);
   --vlx-text-primary: #e2e8f0;
   --vlx-text-secondary: #94a3b8;
   --vlx-shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.35);
   --vlx-shadow-md: 0 24px 48px -24px rgba(0, 0, 0, 0.8);
-  --vlx-grid-line: rgba(148, 163, 184, 0.14);
+  --vlx-grid-line: rgba(45, 212, 191, 0.12);
 
-  --md-hue: 218;
+  --md-hue: 205;
   --md-primary-fg-color: var(--vlx-navy);
   --md-primary-fg-color--light: var(--vlx-navy-light);
   --md-primary-fg-color--dark: var(--vlx-navy-dark);
   --md-primary-bg-color: #ffffff;
   --md-primary-bg-color--light: #ffffffb3;
 
-  --md-accent-fg-color: #f59e0b;
-  --md-accent-fg-color--transparent: rgba(245, 158, 11, 0.15);
-  --md-accent-bg-color: #0b1220;
+  --md-accent-fg-color: #2dd4bf;
+  --md-accent-fg-color--transparent: rgba(45, 212, 191, 0.15);
+  --md-accent-bg-color: #0a1626;
 
-  --md-default-bg-color: #0b1220;
+  --md-default-bg-color: #0a1626;
   --md-default-fg-color: #e2e8f0;
   --md-default-fg-color--light: #cbd5e1;
   --md-default-fg-color--lighter: #94a3b8;
   --md-default-fg-color--lightest: #1e293b;
   --md-typeset-color: #e2e8f0;
-  --md-typeset-a-color: #7dd3fc;
+  --md-typeset-a-color: #5eead4;
   --md-code-fg-color: #e2e8f0;
-  --md-code-bg-color: #0a101d;
+  --md-code-bg-color: #08131f;
 }
 
 /* ------------------------------------------------------------------ Tipografia e cabeçalho */
@@ -300,7 +300,7 @@
 
 .md-typeset h1.vlx-title em {
   font-style: normal;
-  color: var(--vlx-accent);
+  color: var(--vlx-amber);
 }
 
 .md-typeset .vlx-lead {
