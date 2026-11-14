@@ -57,7 +57,7 @@ Esta página separa claramente o que **já está ativo no repositório hoje** (p
 
 ## 2. Stack Completa de Auditoria (Planejada no `README.md`)
 
-> **Estágio:** Os comandos abaixo constam no `README.md` como arquitetura-alvo e **ainda não estão implementados** (`docker-compose.yml`, `data/`, `tests/` e módulos Python serão adicionados nos próximos marcos).
+> **Estágio:** Os comandos abaixo são a arquitetura-alvo e **ainda não funcionam de ponta a ponta**. O arquivo `compose.yml` e o `Dockerfile` existem, mas estão **vazios**; `data/` contém apenas placeholders vazios; os módulos Python são stubs.
 
 ### Pré-requisitos previstos
 

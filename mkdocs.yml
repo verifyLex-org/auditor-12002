@@ -15,7 +15,7 @@ theme:
   name: material
   language: pt-BR
   font:
-    text: Inter
+    text: Plus Jakarta Sans
     code: JetBrains Mono
   icon:
     logo: material/scale-balance
@@ -52,7 +52,9 @@ theme:
     - search.highlight
     - search.share
     - content.code.copy
+    - content.code.annotate
     - content.tabs.link
+    - content.tooltips
     - content.action.edit
 
 extra_css:
@@ -105,26 +107,29 @@ markdown_extensions:
 
 nav:
   - Início: index.md
-  - Domínio & Regras:
+  - Domínio:
       - dominio/index.md
       - Catálogo R1–R6: dominio/regras-r1-r6.md
       - Fronteira jurídica (Art. 76): dominio/fronteira-art76.md
   - Arquitetura:
       - arquitetura/index.md
+      - Dupla fonte concordante: arquitetura/dupla-fonte.md
       - Contratos e banco único: arquitetura/contratos-e-dados.md
       - Decisões (ADRs):
           - arquitetura/decisoes/index.md
           - "ADR-001 — Máquina de 4 estados e aplicabilidade": arquitetura/decisoes/adr-001-maquina-estados-e-abstencao.md
           - "ADR-002 — Dupla fonte concordante": arquitetura/decisoes/adr-002-dupla-fonte-concordante.md
           - "ADR-003 — Banco único e Ollama offline": arquitetura/decisoes/adr-003-banco-unico-postgres-e-ollama-offline.md
-  - Dados & Modelos:
+  - Dados & Pesquisa:
+      - dados-e-modelos/index.md
       - Data Card: dados-e-modelos/DATA_CARD.md
       - Model Card: dados-e-modelos/MODEL_CARD.md
       - Protocolo D/A/B/C: dados-e-modelos/protocolo-experimental.md
-  - Segurança & FinOps:
-      - Threat Model: seguranca/threat-model.md
-      - FinOps e Hardware: seguranca/FINOPS.md
   - Operação:
-      - Demo (Roteiro): operacao/DEMO.md
-      - Como rodar: operacao/como-rodar.md
+      - Quickstart offline: operacao/como-rodar.md
+      - Roteiro de demo: operacao/DEMO.md
+      - FinOps e hardware: seguranca/FINOPS.md
+  - Segurança & Governança:
+      - seguranca/index.md
+      - Threat Model: seguranca/threat-model.md
       - Contribuir: operacao/contribuir.md

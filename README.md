@@ -1,5 +1,9 @@
 # Auditor 12.002
 
+> **Portal de documentação:** [verifylex-org.github.io/auditor-12002](https://verifylex-org.github.io/auditor-12002/) — domínio, arquitetura, protocolo experimental e quickstart.
+>
+> **Estado atual:** especificação, governança e CI estão prontos. Os módulos de execução (`parser/`, `rules/`, `llm/`, `verify/`, `pipeline/`, `eval/`, `sql/`, `app/`) existem como stubs e estão no roadmap.
+
 > **Aviso de independência:** Este é um projeto independente de código aberto, desenvolvido exclusivamente sobre dados públicos oficiais (Diário Oficial da União, Câmara dos Deputados e Portal da Legislação). Não possui vínculo institucional, patrocínio ou endosso da Casa Civil, da Secretaria Especial para Assuntos Jurídicos (SAJ) ou da Universidade de Brasília (UnB).
 
 Assistente auditável de revisão de técnica legislativa sob o **Decreto nº 12.002/2024**, projetado para identificar achados verificáveis em atos normativos federais, explicitar exceções legais e abster-se automaticamente quando não dispõe de evidência íntegra suficiente.
@@ -82,7 +86,7 @@ Todas as regras referem-se ao **Decreto nº 12.002, de 22 de abril de 2024** (vi
 O corpus é composto por **70 atos normativos federais** publicados após **01/06/2024** (art. 78) no âmbito da administração pública federal direta, autárquica e fundacional (art. 2º), divididos em **60 atos de teste** (360 decisões `ato × regra`) e **10 atos de desenvolvimento**:
 
 * **Estratificação do conjunto de teste (60 atos):** 12 decretos numerados, 3 decretos de promulgação de atos internacionais, 18 portarias ministeriais, 20 portarias/instruções normativas de autarquias e fundações e 7 resoluções de colegiados.
-* **Preservação imutável:** cada ato é armazenado em `data/raw/{ato_id}/` com fonte primária (`HTML`), conferência (`PDF` oficial do DOU), `XML` (quando disponível) e metadados de proveniência, protegidos por `data/manifesto.csv` e `data/MANIFEST.sha256`. O CI bloqueia qualquer Pull Request que altere o manifesto ou o gabarito `gold-v1.csv` após seu congelamento.
+* **Preservação imutável:** cada ato é armazenado em `data/raw/{ato_id}/` com fonte primária (`HTML`), conferência (`PDF` oficial do DOU), `XML` (quando disponível) e metadados de proveniência, protegidos por `data/manifesto.csv` e `data/MANIFEST.sha256`. Após o preenchimento de `data/MANIFEST.sha256`, o CI bloqueia Pull Requests que alterem o manifesto, os dados brutos ou o gabarito `gold-v1.csv`. Enquanto esse arquivo estiver vazio, a guarda apenas emite aviso. `PREREGISTRO.md` também gera aviso, não bloqueio.
 
 ---
 
@@ -115,7 +119,7 @@ As hipóteses, desfechos, critérios de corte e regras de parada estão congelad
 
 ```bash
 # 1. Clonar o repositório
-git clone [https://github.com/verifyLex-org/auditor-12002.git](https://github.com/verifyLex-org/auditor-12002.git)
+git clone https://github.com/verifyLex-org/auditor-12002.git
 cd auditor-12002
 
 # 2. Verificar integridade criptográfica do corpus
@@ -134,12 +138,16 @@ Acesse a interface analítica em `http://localhost:8501`.
 ### Comandos úteis (`Makefile`)
 
 ```bash
-make setup            # Instala dependências via uv
-make lint             # Executa ruff check, ruff format --check e mypy
-make test             # Roda suíte unitária, casos difíceis e E2E (sem GPU)
-make test-sec         # Roda bateria de 12 ataques de prompt injection indireto
-make verify-manifest  # Valida SHA-256 de todos os arquivos em data/raw/
-make reproduce        # Reproduz tabelas e métricas a partir do llm_cache
+make setup            # Instala Python 3.12, dependências (uv sync --locked) e hooks
+make lint             # ruff check . e ruff format --check .
+make typecheck        # mypy .
+make test             # pytest -m "not llm" (testes sem LLM)
+make docs             # Serve o portal em http://127.0.0.1:8001
+make docs-build       # mkdocs build --strict
+make check            # Esteira local completa
+make test-sec         # Planejado: bateria de prompt injection (tests/security ainda não existe)
+make verify-manifest  # Planejado: valida SHA-256 de data/raw/ (verify/ é stub)
+make reproduce        # Planejado: reproduz tabelas e métricas a partir do llm_cache
 
 ```
 
@@ -150,7 +158,7 @@ make reproduce        # Reproduz tabelas e métricas a partir do llm_cache
 ```text
 auditor-12002/
 ├── PREREGISTRO.md            # Hipóteses, métricas, critérios de corte e portões congelados
-├── docker-compose.yml        # PostgreSQL 17 + Ollama (internal: true) + Streamlit
+├── compose.yml              # PostgreSQL 17 + Ollama (internal: true) + Streamlit (planejado; hoje vazio)
 ├── pyproject.toml            # Dependências fixadas e configuração de linters/testes
 ├── Makefile                  # Automação de verificação, testes e reprodutibilidade
 ├── data/
@@ -168,7 +176,7 @@ auditor-12002/
 ├── eval/                     # Cálculo de kappa, gerador de mutações, Wilson, bootstrap e McNemar
 ├── sql/                      # Schema relacional e views analíticas de fechamento
 ├── app/                      # Dashboard interativo em Streamlit
-├── tests/                    # Testes unitários, hard_cases, security (injection) e e2e
+├── tests/                    # Testes unitários (hoje); hard_cases, security e e2e são planejados
 └── docs/                     # ADRs, DATA_CARD.md, MODEL_CARD.md, FINOPS.md e DEMO.md
 
 ```

@@ -8,87 +8,113 @@ hide:
 <div class="vlx-landing-wrap">
 
 <div class="vlx-hero">
-  <span class="vlx-eyebrow">Decreto nº 12.002/2024 · verifyLex-org</span>
+  <div class="vlx-badges">
+    <span class="vlx-badge">Decreto nº 12.002/2024</span>
+    <span class="vlx-badge">100% offline</span>
+    <span class="vlx-badge">Python 3.12</span>
+    <span class="vlx-badge">Licença MIT</span>
+  </div>
   <h1 class="vlx-title">Auditor 12.002</h1>
-  <p class="vlx-headline">Assistente auditável de revisão de técnica legislativa com abstenção determinística</p>
+  <p class="vlx-headline">Revisão auditável de técnica legislativa, com abstenção determinística quando a evidência não basta.</p>
   <p class="vlx-subheadline">
-    Avaliação reproduzível de atos normativos federais publicados frente a seis regras objetivas do Decreto nº 12.002/2024, com banco único PostgreSQL 17, dupla fonte concordante e execução 100% offline.
+    Avalia atos normativos federais publicados contra seis regras objetivas do Decreto nº 12.002/2024. Cada veredito aponta sua evidência literal ou declara por que não pôde ser emitido.
   </p>
   <div class="vlx-cta-group">
-    <a href="dominio/" class="vlx-btn-primary">Explorar Domínio e Regras</a>
-    <a href="arquitetura/" class="vlx-btn-secondary">Ver Arquitetura Alvo</a>
+    <a href="operacao/como-rodar/" class="vlx-btn-primary">Começar pelo quickstart</a>
+    <a href="dominio/" class="vlx-btn-secondary">Entender o domínio e as regras</a>
   </div>
 </div>
 
 <div class="vlx-stat-strip">
   <div class="vlx-stat-item">
     <div class="vlx-stat-number">4</div>
-    <div class="vlx-stat-label">Estados explícitos de decisão (<code>CONFORME</code>, <code>ACHADO</code>, <code>NAO_APLICAVEL</code>, <code>NAO_AVALIAVEL</code>)</div>
+    <div class="vlx-stat-label">Estados mutuamente exclusivos por par (ato, regra)</div>
   </div>
   <div class="vlx-stat-item">
     <div class="vlx-stat-number">6</div>
-    <div class="vlx-stat-label">Regras auditáveis versionadas (<code>R1@1.0</code> a <code>R6@1.0</code>)</div>
+    <div class="vlx-stat-label">Regras versionadas, de <code class="vlx-rule">R1@1.0</code> a <code class="vlx-rule">R6@1.0</code></div>
   </div>
   <div class="vlx-stat-item">
     <div class="vlx-stat-number">70</div>
-    <div class="vlx-stat-label">Atos previstos no corpus fechado (60 teste + 10 dev)</div>
+    <div class="vlx-stat-label">Atos no corpus fechado previsto (60 de teste e 10 de desenvolvimento)</div>
   </div>
   <div class="vlx-stat-item">
     <div class="vlx-stat-number">Offline</div>
-    <div class="vlx-stat-label">Inferência local via Ollama (<code>qwen3:8b</code>) em rede isolada</div>
+    <div class="vlx-stat-label">Inferência local com Ollama (<code>qwen3:8b</code>) em rede isolada</div>
   </div>
 </div>
 
 </div>
 
-!!! info "Estado do repositório — Fase de documentação inicial"
-    Este portal consolida a especificação técnica, a fronteira jurídica (art. 76), os registros de decisão arquitetural (ADRs) e o pré-registro experimental do **Auditor 12.002**. Os módulos de código (`domain/`, `parser/`, `rules/`, `llm/`, `verify/`, `sql/`, `app/`), o corpus fechado em `data/` e a execução das condições `D/A/B/C` ainda serão implementados nos próximos marcos.
+!!! info "Estado atual do repositório"
 
-## Máquina de Estados Explícita
+    | Pronto para uso | Em roadmap |
+    | --- | --- |
+    | Especificação de domínio e fronteira do Art. 76 | Pipeline de execução (`parser/`, `rules/`, `llm/`, `verify/`) |
+    | ADRs 001 a 003 e contratos de dados | Banco PostgreSQL 17 e views (`sql/`) |
+    | Pré-registro experimental (`PREREGISTRO.md`) | Execução das condições D, A, B e C (`pipeline/`, `eval/`) |
+    | CI, governança, pre-commit e portal de documentação | Corpus `data/` e painel Streamlit (`app/`) |
 
-Cada par `(ato, regra)` é classificado em exatamente um de quatro estados mutuamente exclusivos:
+## Como funciona a decisão
 
-!!! conforme "CONFORME — Regra aplicável e atendida na evidência extraída"
-    A regra aplica-se ao escopo do ato, a evidência íntegra está disponível e os critérios objetivos ou verificados foram satisfeitos.
+Cada par `(ato, regra)` cai em exatamente um de quatro estados. A abstenção é um resultado válido, não uma falha silenciosa.
 
-!!! achado "ACHADO — Ocorrência verificada de técnica legislativa (Art. 70, III)"
-    Desvio objetivo de técnica legislativa ancorado por trecho literal, offset e hash SHA-256. Em regras sensíveis à tipografia, exige confirmação simultânea na fonte primária (HTML) e no PDF oficial do DOU. Nunca equivale a juízo de invalidade ou ilegalidade (art. 76).
+<div class="vlx-state-grid">
+  <div class="vlx-state-card vlx-state-card--conforme">
+    <span class="vlx-badge vlx-badge--conforme">CONFORME</span>
+    <p>Regra aplicável, evidência íntegra e critério atendido.</p>
+  </div>
+  <div class="vlx-state-card vlx-state-card--achado">
+    <span class="vlx-badge vlx-badge--achado">ACHADO</span>
+    <p>Ocorrência ancorada por trecho, offset e SHA-256. Não é juízo de invalidade (art. 76).</p>
+  </div>
+  <div class="vlx-state-card vlx-state-card--nao-aplicavel">
+    <span class="vlx-badge vlx-badge--nao-aplicavel">NAO_APLICAVEL</span>
+    <p>Fora do escopo da regra ou sob exceção legal explícita.</p>
+  </div>
+  <div class="vlx-state-card vlx-state-card--nao-avaliavel">
+    <span class="vlx-badge vlx-badge--nao-avaliavel">NAO_AVALIAVEL</span>
+    <p>Abstenção obrigatória: falha de extração, divergência entre HTML e PDF ou suporte não verificado.</p>
+  </div>
+</div>
 
-!!! nao-aplicavel "NAO_APLICAVEL — Fora de escopo ou sob exceção legal explícita"
-    O ato não se enquadra na pré-condição da regra (por exemplo, `R5` em ato não alterador) ou incide em exceção prevista no decreto (por exemplo, decretos de promulgação de atos internacionais em `R4` ou atos meramente alteradores/revogadores em `R6`).
-
-!!! nao-avaliavel "NAO_AVALIAVEL — Abstenção obrigatória por insuficiência de evidência"
-    Acionado deterministicamente quando há falha de extração, divergência entre HTML e PDF ou ausência de suporte verificável byte a byte na saída do modelo local.
-
-## Navegação do Portal
+## Escolha seu caminho
 
 <div class="grid cards" markdown>
 
--   :material-book-open-variant-outline: **[Domínio e Regras R1–R6](dominio/index.md)**
+-   :material-scale-balance: **[Jurídico e domínio](dominio/index.md)**
 
     ---
 
-    Escopo legal do Decreto nº 12.002/2024, catálogo `R1@1.0` a `R6@1.0` e fronteira do Art. 76.
+    - Escopo do Decreto nº 12.002/2024
+    - Catálogo `R1@1.0` a `R6@1.0`
+    - Fronteira do Art. 76
 
--   :material-sitemap-outline: **[Arquitetura e ADRs](arquitetura/index.md)**
-
-    ---
-
-    Pipeline em etapas, quarentena do LLM, banco único PostgreSQL 17 e decisões arquiteturais.
-
--   :material-database-check-outline: **[Dados, Modelos e Protocolo D/A/B/C](dados-e-modelos/DATA_CARD.md)**
+-   :material-sitemap-outline: **[Engenharia e arquitetura](arquitetura/index.md)**
 
     ---
 
-    Data Card do corpus fechado, Model Card do `qwen3:8b` e desenho experimental pré-registrado.
+    - Pipeline determinístico e quarentena do LLM
+    - Dupla fonte concordante (HTML + PDF do DOU)
+    - Contratos Pydantic v2 e banco único
 
--   :material-shield-lock-outline: **[Segurança, FinOps e Operação](seguranca/threat-model.md)**
+-   :material-flask-outline: **[Pesquisa e avaliação](dados-e-modelos/index.md)**
 
     ---
 
-    Defesas contra *prompt injection* indireto, custos offline (`FINOPS.md`), roteiro de demo e guia de uso.
+    - Data Card do corpus fechado
+    - Model Card do `qwen3:8b`
+    - Protocolo D/A/B/C pré-registrado
+
+-   :material-console: **[Operação](operacao/como-rodar.md)**
+
+    ---
+
+    - Quickstart offline reproduzível
+    - Roteiro de demonstração
+    - Custos e requisitos de hardware
 
 </div>
 
-!!! note "Aviso de independência institucional"
+!!! note "Independência institucional"
     Projeto independente de código aberto (`verifyLex-org`), desenvolvido sobre atos públicos oficiais (Diário Oficial da União, Câmara dos Deputados e Portal da Legislação). Não possui vínculo, patrocínio ou endosso da Casa Civil, da SAJ ou da Universidade de Brasília (UnB).

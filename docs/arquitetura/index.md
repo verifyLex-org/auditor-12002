@@ -1,6 +1,6 @@
 # Visão Geral da Arquitetura
 
-> **Estágio:** Arquitetura alvo documentada com base no `README.md`. Os diretórios de implementação (`domain/`, `parser/`, `rules/`, `retrieval/`, `llm/`, `pipeline/`, `verify/`, `sql/`, `app/`) aguardam criação nos próximos marcos.
+> **Estágio:** Arquitetura alvo. Os diretórios de implementação (`domain/`, `parser/`, `rules/`, `retrieval/`, `llm/`, `pipeline/`, `verify/`, `eval/`, `sql/`, `app/`) existem como **stubs vazios**; a lógica será implementada nos próximos marcos.
 
 O **Auditor 12.002** adota uma arquitetura enxuta centrada em **banco único (PostgreSQL 17)**, separação estrita entre **núcleo determinístico** e **LLM em quarentena**, verificação matemática pós-geração e operação **100% offline** após o download único dos pesos do modelo local.
 

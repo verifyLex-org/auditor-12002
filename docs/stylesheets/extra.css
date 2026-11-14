@@ -276,6 +276,119 @@
   transform: translateY(-2px);
 }
 
+/* ------------------------------------------------------------------ Badges e chips */
+.vlx-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.md-typeset .vlx-badge {
+  display: inline-block;
+  font-family: var(--md-code-font, "JetBrains Mono", monospace);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--vlx-border-strong);
+  color: var(--vlx-text-secondary);
+  background-color: var(--vlx-surface-muted);
+  white-space: nowrap;
+}
+
+.md-typeset .vlx-badge--conforme {
+  color: var(--vlx-state-conforme);
+  border-color: var(--vlx-state-conforme);
+  background-color: color-mix(in srgb, var(--vlx-state-conforme) 12%, transparent);
+}
+
+.md-typeset .vlx-badge--achado {
+  color: var(--vlx-state-achado);
+  border-color: var(--vlx-state-achado);
+  background-color: color-mix(in srgb, var(--vlx-state-achado) 12%, transparent);
+}
+
+.md-typeset .vlx-badge--nao-aplicavel {
+  color: var(--vlx-state-nao-aplicavel);
+  border-color: var(--vlx-state-nao-aplicavel);
+  background-color: color-mix(in srgb, var(--vlx-state-nao-aplicavel) 12%, transparent);
+}
+
+.md-typeset .vlx-badge--nao-avaliavel {
+  color: var(--vlx-state-nao-avaliavel);
+  border-color: var(--vlx-state-nao-avaliavel);
+  background-color: color-mix(in srgb, var(--vlx-state-nao-avaliavel) 12%, transparent);
+}
+
+.md-typeset code.vlx-rule {
+  font-weight: 600;
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.3rem;
+  border: 1px solid var(--vlx-border);
+  background-color: var(--vlx-surface-muted);
+}
+
+/* ------------------------------------------------------------------ Cartões dos 4 estados */
+.vlx-state-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.25rem 0 2rem;
+}
+
+@media (max-width: 640px) {
+  .vlx-state-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.vlx-state-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1rem 1.1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--vlx-border);
+  border-left-width: 4px;
+  background-color: var(--vlx-surface);
+  box-shadow: var(--vlx-shadow-sm);
+}
+
+.vlx-state-card p {
+  margin: 0;
+  font-size: 0.74rem;
+  line-height: 1.55;
+  color: var(--vlx-text-secondary);
+}
+
+.vlx-state-card--conforme { border-left-color: var(--vlx-state-conforme); }
+.vlx-state-card--achado { border-left-color: var(--vlx-state-achado); }
+.vlx-state-card--nao-aplicavel { border-left-color: var(--vlx-state-nao-aplicavel); }
+.vlx-state-card--nao-avaliavel { border-left-color: var(--vlx-state-nao-avaliavel); }
+
+/* ------------------------------------------------------------------ Tabelas */
+.md-typeset table:not([class]) {
+  border: 1px solid var(--vlx-border);
+  border-radius: 0.45rem;
+  box-shadow: var(--vlx-shadow-sm);
+  overflow: hidden;
+}
+
+.md-typeset table:not([class]) th {
+  background-color: var(--vlx-surface-muted);
+  color: var(--vlx-text-primary);
+  font-weight: 600;
+  border-bottom: 2px solid var(--vlx-border-strong);
+}
+
+.md-typeset table:not([class]) tbody tr:nth-child(even) {
+  background-color: color-mix(in srgb, var(--vlx-surface-muted) 60%, transparent);
+}
+
 /* ------------------------------------------------------------------ Admonitions dos 4 estados */
 :root {
   --md-admonition-icon--conforme: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2m-1.5 14.5-4-4 1.41-1.41L10.5 13.67l5.59-5.58L17.5 9.5Z"/></svg>');
