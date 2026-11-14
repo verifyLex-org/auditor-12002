@@ -1,0 +1,387 @@
+/* ==============================================================================
+   Auditor 12.002 - Identidade Visual e Semântica de Estados
+   Design institucional sóbrio, WCAG AA, alto contraste e sem requisições externas.
+   ============================================================================== */
+
+/* ------------------------------------------------------------------ Modo claro */
+:root,
+[data-md-color-scheme="default"] {
+  --vlx-navy: #162d47;
+  --vlx-navy-light: #2b4e75;
+  --vlx-navy-dark: #0e1f33;
+  --vlx-amber: #9a4d00;
+  --vlx-amber-border: #d97706;
+
+  /* Estados explícitos da máquina de decisão */
+  --vlx-state-conforme: #246a47;
+  --vlx-state-achado: #b45309;
+  --vlx-state-nao-aplicavel: #4b5563;
+  --vlx-state-nao-avaliavel: #1d4ed8;
+
+  /* Tokens de layout */
+  --vlx-surface: #ffffff;
+  --vlx-surface-muted: #f5f7fa;
+  --vlx-border: rgba(15, 23, 42, 0.1);
+  --vlx-border-strong: rgba(15, 23, 42, 0.22);
+  --vlx-text-primary: #111827;
+  --vlx-text-secondary: #4b5563;
+  --vlx-shadow-sm: 0 2px 10px rgba(15, 23, 42, 0.05);
+  --vlx-shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
+
+  --md-primary-fg-color: var(--vlx-navy);
+  --md-primary-fg-color--light: var(--vlx-navy-light);
+  --md-primary-fg-color--dark: var(--vlx-navy-dark);
+  --md-primary-bg-color: #ffffff;
+  --md-primary-bg-color--light: #ffffffb3;
+
+  --md-accent-fg-color: var(--vlx-amber);
+  --md-accent-fg-color--transparent: rgba(154, 77, 0, 0.12);
+  --md-accent-bg-color: #ffffff;
+
+  --md-default-fg-color: #111827;
+  --md-default-fg-color--light: #374151;
+  --md-default-fg-color--lighter: #6b7280;
+  --md-default-fg-color--lightest: #e5e7eb;
+  --md-typeset-color: #111827;
+  --md-typeset-a-color: #164e82;
+  --md-code-fg-color: #111827;
+  --md-code-bg-color: #f1f5f9;
+}
+
+/* ------------------------------------------------------------------ Modo escuro */
+[data-md-color-scheme="slate"] {
+  --vlx-navy: #162d47;
+  --vlx-navy-light: #2b4e75;
+  --vlx-navy-dark: #0e1f33;
+  --vlx-amber: #f59e0b;
+  --vlx-amber-border: #f59e0b;
+
+  --vlx-state-conforme: #5cc28c;
+  --vlx-state-achado: #f59e0b;
+  --vlx-state-nao-aplicavel: #9ca3af;
+  --vlx-state-nao-avaliavel: #60a5fa;
+
+  --vlx-surface: #18202c;
+  --vlx-surface-muted: #111722;
+  --vlx-border: rgba(255, 255, 255, 0.12);
+  --vlx-border-strong: rgba(255, 255, 255, 0.24);
+  --vlx-text-primary: #e5e7eb;
+  --vlx-text-secondary: #9ca3af;
+  --vlx-shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.35);
+  --vlx-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.5);
+
+  --md-hue: 215;
+  --md-primary-fg-color: var(--vlx-navy);
+  --md-primary-fg-color--light: var(--vlx-navy-light);
+  --md-primary-fg-color--dark: var(--vlx-navy-dark);
+  --md-primary-bg-color: #ffffff;
+  --md-primary-bg-color--light: #ffffffb3;
+
+  --md-accent-fg-color: #f59e0b;
+  --md-accent-fg-color--transparent: rgba(245, 158, 11, 0.15);
+  --md-accent-bg-color: #0f141c;
+
+  --md-default-bg-color: #0f141c;
+  --md-default-fg-color: #e5e7eb;
+  --md-default-fg-color--light: #cbd5e1;
+  --md-default-fg-color--lighter: #94a3b8;
+  --md-default-fg-color--lightest: #263140;
+  --md-typeset-color: #e5e7eb;
+  --md-typeset-a-color: #7dd3fc;
+  --md-code-fg-color: #e5e7eb;
+  --md-code-bg-color: #1a2330;
+}
+
+/* ------------------------------------------------------------------ Tipografia e cabeçalho */
+.md-typeset {
+  font-size: 0.8rem;
+  line-height: 1.7;
+}
+
+.md-typeset h1 {
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--vlx-text-primary);
+}
+
+.md-typeset h2 {
+  font-weight: 600;
+  margin-top: 2em;
+}
+
+.md-header {
+  box-shadow: none;
+  border-bottom: 3px solid var(--vlx-amber-border);
+}
+
+.md-tabs {
+  background-color: var(--vlx-navy-dark);
+}
+
+/* ------------------------------------------------------------------ Landing page */
+.vlx-landing-wrap {
+  max-width: 1020px;
+  margin: 0 auto;
+}
+
+.md-typeset .vlx-hero {
+  padding: 2.5rem 1rem 2rem;
+  text-align: center;
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.md-typeset .vlx-eyebrow {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--md-typeset-a-color);
+  background: var(--md-accent-fg-color--transparent);
+  border: 1px solid var(--vlx-border);
+  padding: 0.25rem 0.85rem;
+  border-radius: 999px;
+  margin-bottom: 1rem;
+}
+
+.md-typeset h1.vlx-title {
+  font-size: 2.75rem;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin: 0 0 0.75rem;
+}
+
+@media (max-width: 640px) {
+  .md-typeset h1.vlx-title {
+    font-size: 2rem;
+  }
+}
+
+.md-typeset .vlx-headline {
+  font-size: 1.2rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--vlx-text-primary);
+  margin: 0 0 0.85rem;
+}
+
+.md-typeset .vlx-subheadline {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--vlx-text-secondary);
+  max-width: 660px;
+  margin: 0 auto 1.75rem;
+}
+
+.vlx-cta-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.md-typeset .vlx-btn-primary,
+.md-typeset .vlx-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.55rem 1.25rem;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+}
+
+.md-typeset .vlx-btn-primary {
+  background-color: var(--vlx-navy);
+  color: #ffffff;
+  border: 1px solid var(--vlx-navy);
+  box-shadow: var(--vlx-shadow-sm);
+}
+
+.md-typeset .vlx-btn-primary:hover {
+  background-color: var(--vlx-navy-light);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: var(--vlx-shadow-md);
+}
+
+.md-typeset .vlx-btn-secondary {
+  background-color: transparent;
+  color: var(--md-typeset-a-color);
+  border: 1px solid var(--vlx-border-strong);
+}
+
+.md-typeset .vlx-btn-secondary:hover {
+  background-color: var(--vlx-surface-muted);
+  border-color: var(--md-typeset-a-color);
+  transform: translateY(-1px);
+}
+
+.vlx-stat-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  padding: 1.5rem 0.75rem;
+  margin: 1rem 0 2.5rem;
+  border-top: 1px solid var(--vlx-border);
+  border-bottom: 1px solid var(--vlx-border);
+}
+
+@media (max-width: 820px) {
+  .vlx-stat-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .vlx-stat-strip {
+    grid-template-columns: 1fr;
+  }
+}
+
+.vlx-stat-item {
+  text-align: center;
+}
+
+.vlx-stat-number {
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: var(--vlx-text-primary);
+  font-feature-settings: "tnum";
+}
+
+.vlx-stat-label {
+  font-size: 0.72rem;
+  color: var(--vlx-text-secondary);
+  margin-top: 0.35rem;
+  line-height: 1.35;
+}
+
+/* ------------------------------------------------------------------ Grid cards nativos */
+.md-typeset .grid.cards > ul > li {
+  border: 0.05rem solid var(--vlx-border);
+  border-radius: 0.45rem;
+  background-color: var(--vlx-surface);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.md-typeset .grid.cards > ul > li:hover {
+  border-color: var(--md-typeset-a-color);
+  box-shadow: var(--vlx-shadow-md);
+  transform: translateY(-2px);
+}
+
+/* ------------------------------------------------------------------ Admonitions dos 4 estados */
+:root {
+  --md-admonition-icon--conforme: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2m-1.5 14.5-4-4 1.41-1.41L10.5 13.67l5.59-5.58L17.5 9.5Z"/></svg>');
+  --md-admonition-icon--achado: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 14h-2V9h2m0 9h-2v-2h2M1 21h22L12 2 1 21Z"/></svg>');
+  --md-admonition-icon--nao-aplicavel: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2m5 11H7v-2h10Z"/></svg>');
+  --md-admonition-icon--nao-avaliavel: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m15.07 11.25-.9.92C13.45 12.89 13 13.5 13 15h-2v-.5c0-1.11.45-2.11 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41a2 2 0 0 0-4 0H8a4 4 0 0 1 8 0 3.2 3.2 0 0 1-.93 2.25M13 19h-2v-2h2M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Z"/></svg>');
+}
+
+.md-typeset .admonition.conforme,
+.md-typeset details.conforme {
+  border-color: var(--vlx-state-conforme);
+}
+.md-typeset .conforme > .admonition-title,
+.md-typeset .conforme > summary {
+  background-color: color-mix(in srgb, var(--vlx-state-conforme) 14%, transparent);
+}
+.md-typeset .conforme > .admonition-title::before,
+.md-typeset .conforme > summary::before {
+  background-color: var(--vlx-state-conforme);
+  -webkit-mask-image: var(--md-admonition-icon--conforme);
+  mask-image: var(--md-admonition-icon--conforme);
+}
+
+.md-typeset .admonition.achado,
+.md-typeset details.achado {
+  border-color: var(--vlx-state-achado);
+}
+.md-typeset .achado > .admonition-title,
+.md-typeset .achado > summary {
+  background-color: color-mix(in srgb, var(--vlx-state-achado) 15%, transparent);
+}
+.md-typeset .achado > .admonition-title::before,
+.md-typeset .achado > summary::before {
+  background-color: var(--vlx-state-achado);
+  -webkit-mask-image: var(--md-admonition-icon--achado);
+  mask-image: var(--md-admonition-icon--achado);
+}
+
+.md-typeset .admonition.nao-aplicavel,
+.md-typeset details.nao-aplicavel {
+  border-color: var(--vlx-state-nao-aplicavel);
+}
+.md-typeset .nao-aplicavel > .admonition-title,
+.md-typeset .nao-aplicavel > summary {
+  background-color: color-mix(in srgb, var(--vlx-state-nao-aplicavel) 14%, transparent);
+}
+.md-typeset .nao-aplicavel > .admonition-title::before,
+.md-typeset .nao-aplicavel > summary::before {
+  background-color: var(--vlx-state-nao-aplicavel);
+  -webkit-mask-image: var(--md-admonition-icon--nao-aplicavel);
+  mask-image: var(--md-admonition-icon--nao-aplicavel);
+}
+
+.md-typeset .admonition.nao-avaliavel,
+.md-typeset details.nao-avaliavel {
+  border-color: var(--vlx-state-nao-avaliavel);
+}
+.md-typeset .nao-avaliavel > .admonition-title,
+.md-typeset .nao-avaliavel > summary {
+  background-color: color-mix(in srgb, var(--vlx-state-nao-avaliavel) 14%, transparent);
+}
+.md-typeset .nao-avaliavel > .admonition-title::before,
+.md-typeset .nao-avaliavel > summary::before {
+  background-color: var(--vlx-state-nao-avaliavel);
+  -webkit-mask-image: var(--md-admonition-icon--nao-avaliavel);
+  mask-image: var(--md-admonition-icon--nao-avaliavel);
+}
+
+/* ------------------------------------------------------------------ Acessibilidade */
+:focus-visible {
+  outline: 2px solid var(--vlx-amber);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ------------------------------------------------------------------ Impressão limpa */
+@media print {
+  @page {
+    size: A4;
+    margin: 10mm 12mm;
+  }
+
+  .md-header,
+  .md-tabs,
+  .md-sidebar,
+  .md-footer,
+  .md-source,
+  .md-top,
+  .md-content__button,
+  pre.mermaid {
+    display: none !important;
+  }
+
+  .md-main__inner,
+  .md-content,
+  .md-content__inner {
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+}

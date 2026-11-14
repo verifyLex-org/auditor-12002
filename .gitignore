@@ -1,16 +1,27 @@
 # Python e ferramentas
 .venv/
+venv/
+env/
+ENV/
 .uv-cache/
 __pycache__/
 *.py[cod]
+*$py.class
+*.so
+.Python
 .pytest_cache/
 .ruff_cache/
 .mypy_cache/
 .coverage*
 htmlcov/
+coverage.xml
 build/
 dist/
 *.egg-info/
+
+# Documentação (build estático e cache do plugin privacy)
+/site/
+.cache/
 
 # Configuração local, chaves e credenciais
 .env
@@ -24,9 +35,13 @@ dist/
 **/*.p12
 **/*.pfx
 
-# Dados locais e saídas
+# Dados locais, volumes de containers e saídas
 .local/
 artifacts/
+postgres_data/
+ollama_data/
+*.sqlite
+*.sqlite3
 data/inbox/
 data/private/
 data/annotations/
@@ -39,10 +54,17 @@ data/results/
 *.part
 *.crdownload
 *.log
+logs/
 .DS_Store
 Thumbs.db
+desktop.ini
 .idea/
-.vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+*.swp
+*.swo
+*~
 
 # Lista de permissões para os documentos brutos.
 # O verificador do manifesto também rejeita arquivos rastreados fora desta lista.

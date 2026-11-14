@@ -1,7 +1,8 @@
 [project]
 name = "auditor-12002"
 version = "0.1.0"
-description = "Assistente de revisão de técnica legislativa"
+description = "Assistente auditável de revisão de técnica legislativa sob o Decreto nº 12.002/2024."
+readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [
     "psycopg[binary]>=3.2,<4",
@@ -23,16 +24,26 @@ dev = [
     "mypy>=1.15,<3",
     "pre-commit>=4,<5",
 ]
+docs = [
+    "mkdocs>=1.6,<2",
+    "mkdocs-material>=9.5,<10",
+    "mkdocs-git-revision-date-localized-plugin>=1.4,<2",
+]
 
 [tool.uv]
 package = false
+default-groups = ["dev", "docs"]
 
 [tool.ruff]
 target-version = "py312"
 line-length = 100
+extend-exclude = ["docs", "site"]
 
 [tool.ruff.lint]
 select = ["E4", "E7", "E9", "F", "I"]
+
+[tool.ruff.format]
+quote-style = "double"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

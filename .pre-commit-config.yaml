@@ -1,6 +1,25 @@
+# Hooks executados antes de cada commit.
+# Instalação (uma vez por clone):
+#   uv run pre-commit install --install-hooks
+# Execução manual em todo o repositório:
+#   uv run pre-commit run --all-files
 repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-merge-conflict
+      - id: check-yaml
+        args: [--unsafe] # mkdocs.yml utiliza tags !!python/name do pymdownx
+      - id: check-toml
+      - id: check-added-large-files
+        args: [--maxkb=1024]
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.24.3
+    rev: v8.30.1
     hooks:
       - id: gitleaks
 
