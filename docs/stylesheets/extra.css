@@ -1262,6 +1262,30 @@
   border: 1px solid var(--vlx-border);
   border-radius: 0.8rem;
   background: var(--vlx-surface);
+
+  /* Tema do Mermaid alinhado à paleta (variáveis lidas pelo Material dentro do shadow DOM) */
+  --md-default-fg-color--lightest: color-mix(in srgb, var(--vlx-accent) 7%, var(--vlx-surface-muted));
+  --md-default-fg-color--lighter: var(--vlx-border-strong);
+  --md-mermaid-font-family: var(--md-text-font-family);
+  --md-mermaid-edge-color: var(--vlx-accent);
+  --md-mermaid-node-bg-color: color-mix(in srgb, var(--vlx-accent) 11%, var(--vlx-surface));
+  --md-mermaid-node-fg-color: var(--vlx-accent);
+  --md-mermaid-label-bg-color: var(--vlx-surface);
+  --md-mermaid-label-fg-color: var(--vlx-text-primary);
+  --md-mermaid-sequence-actor-bg-color: color-mix(in srgb, var(--vlx-accent) 11%, var(--vlx-surface));
+  --md-mermaid-sequence-actor-fg-color: var(--vlx-text-primary);
+  --md-mermaid-sequence-actor-border-color: var(--vlx-accent);
+  --md-mermaid-sequence-actor-line-color: var(--vlx-border-strong);
+  --md-mermaid-sequence-message-line-color: var(--vlx-accent);
+  --md-mermaid-sequence-message-fg-color: var(--vlx-text-primary);
+  --md-mermaid-sequence-loop-bg-color: color-mix(in srgb, var(--vlx-amber-border) 12%, var(--vlx-surface));
+  --md-mermaid-sequence-loop-fg-color: var(--vlx-text-primary);
+  --md-mermaid-sequence-loop-border-color: var(--vlx-amber-border);
+  --md-mermaid-sequence-note-bg-color: color-mix(in srgb, var(--vlx-amber-border) 14%, var(--vlx-surface));
+  --md-mermaid-sequence-note-fg-color: var(--vlx-text-primary);
+  --md-mermaid-sequence-note-border-color: var(--vlx-amber-border);
+  --md-mermaid-sequence-number-bg-color: var(--vlx-accent);
+  --md-mermaid-sequence-number-fg-color: var(--vlx-surface);
 }
 
 /* ------------------------------------------------------------------ Admonitions dos 4 estados */
@@ -1571,12 +1595,12 @@
 /* Grade de cartões */
 .md-typeset .vlx-card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(17rem, 100%), 1fr));
   gap: 1rem;
   margin: 1.2rem 0 1.6rem;
 }
 .md-typeset .vlx-card-grid--3 {
-  grid-template-columns: repeat(auto-fit, minmax(14.5rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(14.5rem, 100%), 1fr));
 }
 
 .md-typeset .vlx-card {
@@ -1775,4 +1799,14 @@
 }
 .md-typeset .vlx-chip--plan {
   --k: var(--vlx-state-achado);
+}
+
+/* Alvos de toque/clique de pelo menos 24px (WCAG 2.2, 2.5.8) em navegação e permalinks */
+.md-tabs__link,
+.md-path__link {
+  display: inline-block;
+  padding-block: 0.3rem;
+}
+.md-typeset .headerlink {
+  padding-inline: 0.4rem;
 }
