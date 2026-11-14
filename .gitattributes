@@ -1,0 +1,5 @@
+* text=auto eol=lf
+data/raw/** -text
+data/manifesto.csv text eol=lf
+data/MANIFEST.sha256 text eol=lf
+data/gold/gold-v1.csv text eol=lf
