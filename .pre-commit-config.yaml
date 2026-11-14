@@ -1,0 +1,26 @@
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.24.3
+    hooks:
+      - id: gitleaks
+
+  - repo: local
+    hooks:
+      - id: ruff-check
+        name: Ruff check
+        entry: uv run --offline --no-sync ruff check
+        language: system
+        types: [python]
+
+      - id: ruff-format
+        name: Ruff format check
+        entry: uv run --offline --no-sync ruff format --check
+        language: system
+        types: [python]
+
+      - id: manifest-integrity
+        name: Integridade dos arquivos em stage
+        entry: uv run --offline --no-sync python -m verify.manifest --staged
+        language: system
+        pass_filenames: false
+        always_run: true

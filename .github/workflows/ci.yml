@@ -1,0 +1,98 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@v7
+        with:
+          python-version: "3.12"
+      - run: uv sync --locked --dev
+      - run: uv run --no-sync ruff check .
+      - run: uv run --no-sync ruff format --check .
+
+  test:
+    name: pytest-offline
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: auditor
+          POSTGRES_PASSWORD: ci-test-only
+          POSTGRES_DB: auditor
+        ports:
+          - 5432/tcp
+        options: >-
+          --health-cmd "pg_isready -U auditor -d auditor"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@v7
+        with:
+          python-version: "3.12"
+      - run: uv sync --locked --dev
+      - run: uv run --no-sync pytest -m "not llm"
+        env:
+          AUDITOR_TEST_DSN: postgresql://auditor:ci-test-only@127.0.0.1:${{ job.services.postgres.ports[5432] }}/auditor
+
+  secrets:
+    name: gitleaks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Examinar commits alcançáveis
+        run: |
+          git config --global --add safe.directory /repo
+          docker run --rm -v "$PWD:/repo:ro" \
+            -e GIT_CONFIG_COUNT=1 \
+            -e GIT_CONFIG_KEY_0=safe.directory \
+            -e GIT_CONFIG_VALUE_0=/repo \
+            ghcr.io/gitleaks/gitleaks:v8.24.3 git /repo \
+            --redact=100 --log-opts="HEAD"
+
+  manifest:
+    name: manifest-integrity
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@v7
+        with:
+          python-version: "3.12"
+      - name: Verificar merge proposto com a política da base
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          git show "$BASE_SHA:verify/manifest.py" > "$RUNNER_TEMP/manifest.py"
+          uv run --no-project python "$RUNNER_TEMP/manifest.py" --base "$BASE_SHA"
+      - name: Verificar main
+        if: github.event_name == 'push'
+        run: uv run --no-project python -m verify.manifest
