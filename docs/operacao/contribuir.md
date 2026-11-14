@@ -17,7 +17,7 @@ As regras de colaboração deste repositório protegem três pilares do **Audito
 - Antes de abrir um Pull Request, valide localmente os checks exigidos pelo CI (`.github/workflows/ci.yml` e `.github/workflows/docs.yml`, ver [Como Rodar](como-rodar.md)):
   - `uv run --frozen ruff check .` e `uv run --frozen ruff format --check .`
   - `uv run --frozen mypy .`
-  - `uv run --frozen pytest -m "not llm"`
+  - `uv run --frozen pytest -m "not llm and not e2e"` (e `uv run --frozen pytest tests/e2e -m e2e` após `mkdocs build`)
   - `uv run --frozen python -m scripts.check_governance`
   - `uv run --frozen mkdocs build --strict`
 

@@ -1,6 +1,7 @@
 # Visão Geral da Arquitetura
 
-> **Estágio:** Arquitetura alvo. Os diretórios de implementação (`domain/`, `parser/`, `rules/`, `retrieval/`, `llm/`, `pipeline/`, `verify/`, `eval/`, `sql/`, `app/`) existem como **stubs vazios**; a lógica será implementada nos próximos marcos.
+!!! info "Estágio neste repositório"
+    Arquitetura alvo. Os módulos `domain/`, `parser/`, `rules/`, `retrieval/`, `llm/`, `pipeline/`, `verify/{evidence,terminology}.py`, `eval/`, `sql/` e `app/` existem como **stubs vazios** e serão implementados nos próximos marcos; `verify/manifest.py` já está ativo e testado.
 
 O **Auditor 12.002** adota uma arquitetura enxuta centrada em **banco único (PostgreSQL 17)**, separação estrita entre **núcleo determinístico** e **LLM em quarentena**, verificação matemática pós-geração e operação **100% offline** após o download único dos pesos do modelo local.
 

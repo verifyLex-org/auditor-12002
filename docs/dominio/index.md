@@ -1,6 +1,7 @@
 # Domínio e Semântica de Decisão
 
-> **Estágio:** Especificação de domínio consolidada. Os checkers e o motor de aplicabilidade em `rules/` existem como stubs e aguardam implementação.
+!!! info "Estágio neste repositório"
+    Especificação de domínio consolidada. Os checkers e o motor de aplicabilidade em `rules/` existem como stubs e aguardam implementação.
 
 O **Auditor 12.002** é um assistente auditável de revisão de técnica legislativa aplicado a atos normativos federais publicados após **1º de junho de 2024** (art. 78 do **Decreto nº 12.002, de 22 de abril de 2024**) no âmbito da administração pública federal direta, autárquica e fundacional (art. 2º).
 

@@ -1,6 +1,7 @@
 # Fronteira Jurídica (Art. 76 e Art. 70, III)
 
-> **Estágio:** Diretriz normativa e contratual permanente do projeto, aplicável desde a concepção da documentação e da interface.
+!!! note "Diretriz permanente"
+    Norma contratual aplicável desde a concepção da documentação, da API e da interface.
 
 O **Auditor 12.002** opera sob limites legais explícitos extraídos do próprio **Decreto nº 12.002/2024**. A clareza terminológica não é cosmética: ela impede que um sistema automatizado de técnica legislativa extrapole sua competência para emitir juízos jurídicos inválidos ou enganosos.
 

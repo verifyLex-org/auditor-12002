@@ -1,6 +1,7 @@
 # Segurança e Governança
 
-> **Estágio:** Modelo de ameaças e governança documentados. A bateria de testes de segurança (`tests/security`) e os controles em `llm/` e `verify/` ainda não foram implementados.
+!!! info "Estágio neste repositório"
+    Modelo de ameaças e governança documentados. A bateria de testes de segurança (`tests/security`) e os controles em `llm/` e `verify/{evidence,terminology}.py` ainda não foram implementados.
 
 O Auditor 12.002 trata o texto legislativo como **dado não confiável**, mesmo quando vem de fonte oficial. Esta seção descreve as ameaças, os controles e as regras de contribuição.
 

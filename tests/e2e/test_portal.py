@@ -173,3 +173,172 @@ def test_contrast_aa(open_page: OpenPage, route: str, scheme: str) -> None:
 
     assert loaded.errors == []
     assert data["lowContrast"] == []
+
+
+ELEMENT_STYLE_JS = """(selector) => {
+  const el = document.querySelector(selector);
+  if (!el) return null;
+  const parse = (c) => {
+    const m = /rgba?\\(([^)]+)\\)/.exec(c || "");
+    if (!m) return { r: 0, g: 0, b: 0, a: 0 };
+    const [r, g, b, a = 1] = m[1].split(",").map((x) => parseFloat(x.trim()));
+    return { r, g, b, a };
+  };
+  const over = (fg, bg) => ({
+    r: fg.r * fg.a + bg.r * (1 - fg.a),
+    g: fg.g * fg.a + bg.g * (1 - fg.a),
+    b: fg.b * fg.a + bg.b * (1 - fg.a),
+    a: 1,
+  });
+  const lin = (v) => {
+    const x = v / 255;
+    return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4);
+  };
+  const lum = (c) => 0.2126 * lin(c.r) + 0.7152 * lin(c.g) + 0.0722 * lin(c.b);
+  const layers = [];
+  for (let a = el; a; a = a.parentElement) {
+    const bg = parse(getComputedStyle(a).backgroundColor);
+    if (bg.a > 0) {
+      layers.push(bg);
+      if (bg.a >= 0.99) break;
+    }
+  }
+  const bodyToken = getComputedStyle(document.body).getPropertyValue("--md-default-bg-color").trim();
+  let bg = layers.length && layers[layers.length - 1].a >= 0.99 ? layers.pop() : parse(bodyToken || "#fff");
+  while (layers.length) bg = over(layers.pop(), bg);
+  const s = getComputedStyle(el);
+  let fg = parse(s.color);
+  if (fg.a < 1) fg = over(fg, bg);
+  const l1 = lum(fg);
+  const l2 = lum(bg);
+  return {
+    scheme: document.body.getAttribute("data-md-color-scheme"),
+    contrast: (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05),
+    focusVisible: el.matches(":focus-visible"),
+    outlineStyle: s.outlineStyle,
+    outlineWidth: parseFloat(s.outlineWidth || "0"),
+    fg: s.color,
+    bg: s.backgroundColor,
+  };
+}"""
+
+
+def _rects_separation(a: dict[str, float], b: dict[str, float]) -> float:
+    """Distância mínima (px) entre dois retângulos; negativa indica sobreposição."""
+    dx = max(b["left"] - a["right"], a["left"] - b["right"], 0.0)
+    dy = max(b["top"] - a["bottom"], a["top"] - b["bottom"], 0.0)
+    if dx > 0.0 or dy > 0.0:
+        return float(max(dx, dy))
+    overlap_x = min(a["right"], b["right"]) - max(a["left"], b["left"])
+    overlap_y = min(a["bottom"], b["bottom"]) - max(a["top"], b["top"])
+    return -float(min(overlap_x, overlap_y))
+
+
+@pytest.mark.parametrize("scheme", ["light", "dark"])
+@pytest.mark.parametrize("selector", [".vlx-btn-primary", ".vlx-btn-secondary"])
+def test_hero_cta_states_contrast(open_page: OpenPage, scheme: str, selector: str) -> None:
+    """Botões CTA preservam contraste AA (>= 4,5:1) em repouso, hover e foco."""
+    loaded = open_page("", viewport="desktop", scheme=scheme, reduced_motion=False)
+    page = loaded.page
+    expected_scheme = "slate" if scheme == "dark" else "default"
+
+    rest = page.evaluate(ELEMENT_STYLE_JS, selector)
+    assert rest is not None
+    assert rest["scheme"] == expected_scheme
+    assert rest["contrast"] >= 4.5, f"{selector} repouso {scheme}: {rest}"
+
+    btn = page.locator(selector)
+    btn.hover()
+    page.wait_for_timeout(260)
+    hovered = page.evaluate(ELEMENT_STYLE_JS, selector)
+    assert hovered is not None
+    assert hovered["contrast"] >= 4.5, f"{selector} hover {scheme}: {hovered}"
+
+    # Garante modalidade de teclado para acionar :focus-visible real.
+    page.mouse.move(0, 0)
+    page.keyboard.press("Tab")
+    page.evaluate("(sel) => document.querySelector(sel).focus()", selector)
+    focused = page.evaluate(ELEMENT_STYLE_JS, selector)
+    assert focused is not None
+    assert focused["focusVisible"] is True
+    assert focused["outlineStyle"] != "none"
+    assert focused["outlineWidth"] >= 2.0
+    assert focused["contrast"] >= 4.5, f"{selector} focus-visible {scheme}: {focused}"
+    assert loaded.errors == []
+
+
+@pytest.mark.parametrize("scheme", ["light", "dark"])
+@pytest.mark.parametrize("viewport", ["tablet", "desktop"])
+def test_navigation_cards_hover_no_overlap(open_page: OpenPage, scheme: str, viewport: str) -> None:
+    """Cards de 'Escolha seu caminho' formam grade 2x2 e não se sobrepõem no hover."""
+    loaded = open_page("", viewport=viewport, scheme=scheme, reduced_motion=False)
+    page = loaded.page
+    cards = page.locator(".grid.cards > ul > li")
+    assert cards.count() == 4
+    cards.first.scroll_into_view_if_needed()
+
+    card_rects_js = """() => [...document.querySelectorAll('.grid.cards > ul > li')].map((el) => {
+      const r = el.getBoundingClientRect();
+      return { left: r.left, right: r.right, top: r.top, bottom: r.bottom };
+    })"""
+    rest_rects: list[dict[str, float]] = page.evaluate(card_rects_js)
+    assert abs(rest_rects[0]["top"] - rest_rects[1]["top"]) < 2.0
+    assert abs(rest_rects[2]["top"] - rest_rects[3]["top"]) < 2.0
+
+    for idx in range(4):
+        cards.nth(idx).hover()
+        page.wait_for_timeout(280)
+        rects: list[dict[str, float]] = page.evaluate(card_rects_js)
+        hovered = rects[idx]
+        for other_idx, other in enumerate(rects):
+            if other_idx == idx:
+                continue
+            sep = _rects_separation(hovered, other)
+            assert sep >= 12.0, f"card {idx} colidiu com card {other_idx} ({sep:.1f}px)"
+    assert loaded.errors == []
+
+
+@pytest.mark.parametrize("scheme", ["light", "dark"])
+@pytest.mark.parametrize("viewport", ["mobile", "tablet", "desktop"])
+def test_status_board_layout_and_contrast(open_page: OpenPage, scheme: str, viewport: str) -> None:
+    """Painel de estado exibe 2 colunas no desktop/tablet, empilha no mobile e mantém AA."""
+    loaded = open_page("", viewport=viewport, scheme=scheme, reduced_motion=True)
+    page = loaded.page
+    panels: list[dict[str, float]] = page.evaluate(
+        """() => [...document.querySelectorAll('.vlx-status-panel')].map((el) => {
+          const r = el.getBoundingClientRect();
+          return { left: r.left, right: r.right, top: r.top, bottom: r.bottom };
+        })"""
+    )
+    assert len(panels) == 2
+    if viewport == "mobile":
+        assert panels[1]["top"] >= panels[0]["bottom"] + 10.0
+    else:
+        assert abs(panels[0]["top"] - panels[1]["top"]) < 2.0
+        assert panels[1]["left"] >= panels[0]["right"] + 12.0
+
+    for pill in (".vlx-status-pill--ready", ".vlx-status-pill--roadmap"):
+        res = page.evaluate(ELEMENT_STYLE_JS, pill)
+        assert res is not None
+        assert res["contrast"] >= 4.5, f"{pill} {scheme}: {res}"
+    assert loaded.errors == []
+
+
+def test_mobile_verdict_alignment_and_subpage_admonitions(open_page: OpenPage) -> None:
+    """Bloco de veredito alinha colunas no mobile e subpáginas usam admonitions."""
+    home = open_page("", viewport="mobile", scheme="dark", reduced_motion=True)
+    rows: list[dict[str, float]] = home.page.evaluate(
+        """() => [...document.querySelectorAll('.vlx-verdict-body > div')].map((row) => {
+          const k = row.querySelector('.vlx-k').getBoundingClientRect();
+          const v = row.querySelector('.vlx-v').getBoundingClientRect();
+          return { kRight: k.right, vLeft: v.left };
+        })"""
+    )
+    assert len(rows) == 5
+    assert all(r["vLeft"] >= r["kRight"] for r in rows)
+
+    for route in ("operacao/como-rodar/", "seguranca/threat-model/", "dominio/"):
+        sub = open_page(route, viewport="desktop", scheme="light", reduced_motion=True)
+        assert sub.page.locator(".md-typeset .admonition").count() >= 1
+        assert sub.page.locator(".md-typeset blockquote").count() == 0
+        assert sub.errors == []

@@ -1,6 +1,7 @@
 # Data Card — Corpus Fechado do Auditor 12.002
 
-> **Estágio:** Especificação do corpus fechado conforme `README.md` e `PREREGISTRO.md`. Os arquivos em `data/raw/`, `data/manifesto.csv`, `data/MANIFEST.sha256` e `data/gold/gold-v1.csv` ainda serão coletados, anotados e congelados.
+!!! info "Estágio neste repositório"
+    Especificação do corpus fechado conforme `README.md` e `PREREGISTRO.md`. Os arquivos em `data/raw/`, `data/manifesto.csv`, `data/MANIFEST.sha256` e `data/gold/gold-v1.csv` ainda serão coletados, anotados e congelados.
 
 ## 1. Visão Geral do Conjunto de Dados
 

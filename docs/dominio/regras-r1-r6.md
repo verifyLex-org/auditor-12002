@@ -1,6 +1,7 @@
 # Catálogo das 6 Regras Auditáveis (`R1@1.0` a `R6@1.0`)
 
-> **Estágio:** Especificação normativa de regras. Os módulos correspondentes em `rules/` ainda não foram implementados.
+!!! info "Estágio neste repositório"
+    Especificação normativa de regras. Os módulos correspondentes em `rules/` ainda não foram implementados.
 
 Todas as regras referem-se ao **Decreto nº 12.002, de 22 de abril de 2024** (com vigência a partir de 1º de junho de 2024, nos termos do art. 78). Cada regra possui identificador e versão imutáveis por ciclo experimental.
 

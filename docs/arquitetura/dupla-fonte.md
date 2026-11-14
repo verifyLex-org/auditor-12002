@@ -1,6 +1,7 @@
 # Dupla Fonte Concordante
 
-> **Estágio:** Especificação. Resume a [ADR-002](decisoes/adr-002-dupla-fonte-concordante.md); o detector em `parser/` ainda não foi implementado.
+!!! info "Estágio neste repositório"
+    Especificação. Resume a [ADR-002](decisoes/adr-002-dupla-fonte-concordante.md); o detector em `parser/` ainda não foi implementado.
 
 Regras sensíveis à tipografia (`R3@1.0` e `R5@1.0`) só podem emitir `ACHADO` quando a mesma ocorrência aparece **nas duas fontes**: o HTML primário e o PDF oficial do Diário Oficial da União (DOU).
 

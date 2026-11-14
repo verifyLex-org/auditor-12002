@@ -21,6 +21,11 @@ class _QuietHandler(SimpleHTTPRequestHandler):
         return
 
 
+class _LocalServer(ThreadingHTTPServer):
+    # Backlog padrão (5) do stdlib pode recusar rajadas simultâneas do Chromium no Windows.
+    request_queue_size = 128
+
+
 @pytest.fixture(scope="session")
 def site_dir() -> Path:
     """Site já compilado por `mkdocs build --strict` (ou `AUDITOR_SITE_DIR`)."""
@@ -37,7 +42,7 @@ def site_dir() -> Path:
 def base_url(site_dir: Path) -> Iterator[str]:
     """Serve o site em 127.0.0.1 numa porta livre durante a sessão de testes."""
     handler = partial(_QuietHandler, directory=str(site_dir))
-    server = ThreadingHTTPServer(("127.0.0.1", 0), handler)
+    server = _LocalServer(("127.0.0.1", 0), handler)
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
     try:

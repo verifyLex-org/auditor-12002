@@ -1,6 +1,7 @@
 # Threat Model — Segurança e Isolamento do Pipeline
 
-> **Estágio:** Modelo de ameaças inicial documentado com base na arquitetura do `README.md`. A suíte automatizada de segurança (`tests/security`, 12 cenários de *prompt injection* indireto) será implementada junto aos módulos `llm/` e `verify/`.
+!!! info "Estágio neste repositório"
+    Modelo de ameaças inicial documentado com base na arquitetura do `README.md`. A suíte automatizada de segurança (`tests/security`, 12 cenários de *prompt injection* indireto) será implementada junto aos módulos `llm/` e `verify/`.
 
 ## 1. Ativos Protegidos e Fronteiras de Confiança
 
@@ -27,7 +28,7 @@ flowchart TB
 | `TM-03` | **Alucinação de trecho ou offset** para justificar `ACHADO` | Saída estruturada do Maker `R5`/`R6` | **Verificador de integridade byte a byte** + suporte do predicado; qualquer citação inexistente rebaixa para `NAO_AVALIAVEL` | Planejado (`verify/`) |
 | `TM-04` | **Divergência entre fonte HTML e PDF oficial** | Extração de `R3`/`R5` | **Dupla fonte concordante**: divergência força abstenção `NAO_AVALIAVEL` | Planejado (`parser/`) |
 | `TM-05` | **Manipulação pós-hoc de métricas ou números exibidos** | Relatórios e UI Streamlit | Recomputação exclusiva via **views SQL no PostgreSQL 17** e validação pós-renderização no `Verificador FINAL` | Planejado (`sql/`, `verify/`) |
-| `TM-06` | **Adulteração do corpus ou gabarito após congelamento** | `data/raw/`, `manifesto.csv`, `gold-v1.csv` | Validação criptográfica `MANIFEST.sha256` (`verify/`) e guarda automática em PR no CI (`.github/workflows/ci.yml` + `scripts.check_governance`) | **Guarda de PR ativo no CI**; `verify.manifest` planejado (`verify/`) |
+| `TM-06` | **Adulteração do corpus ou gabarito após congelamento** | `data/raw/`, `manifesto.csv`, `gold-v1.csv` | Validação criptográfica `MANIFEST.sha256` (`verify/`) e guarda automática em PR no CI (`.github/workflows/ci.yml` + `scripts.check_governance`) | **Guarda de PR ativo no CI** e **`verify/manifest.py` implementado** (`make verify-manifest`); `verify/evidence.py` e `verify/terminology.py` planejados (`verify/`) |
 | `TM-07` | **Scripts, segredos ou Actions não confiáveis no repo/docs** | Portal MkDocs e esteira GitHub Actions | Plugin `privacy`, hook `docs_hooks/check_site.py`, *pinning* por SHA completo, `gitleaks` via `pre-commit` e análise CodeQL | **Parcial:** plugin, hook, *pinning* e `gitleaks` ativos; CodeQL **planejado** (não há workflow CodeQL no repositório) |
 
 ## 3. Bateria Planejada de Testes de Segurança (`tests/security`)

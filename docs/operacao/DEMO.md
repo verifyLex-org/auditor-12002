@@ -1,6 +1,7 @@
 # Roteiro de Demonstração (`DEMO`)
 
-> **Estágio:** Roteiro-alvo de demonstração planejado com base na arquitetura do `README.md`. O dashboard Streamlit (`app/`), o `docker-compose.yml` e a CLI `pipeline/` ainda não foram implementados; os comandos abaixo documentam o fluxo esperado após a entrega do sistema funcional.
+!!! warning "Roteiro-alvo (em roadmap)"
+    Planejado com base na arquitetura do `README.md`. O dashboard Streamlit (`app/`), o `compose.yml` e a CLI `pipeline/` ainda não foram implementados; os comandos abaixo documentam o fluxo esperado após a entrega do sistema funcional.
 
 ## Objetivo da Demonstração
 

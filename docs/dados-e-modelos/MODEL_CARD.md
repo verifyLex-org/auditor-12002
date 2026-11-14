@@ -1,6 +1,7 @@
 # Model Card — Componente LLM Delimitado (`qwen3:8b`)
 
-> **Estágio:** Especificação do uso delimitado de LLM conforme `README.md` e `ADR-003`. O módulo `llm/` e os registros no `llm_cache` aguardam implementação.
+!!! info "Estágio neste repositório"
+    Especificação do uso delimitado de LLM conforme `README.md` e `ADR-003`. O módulo `llm/` e os registros no `llm_cache` aguardam implementação.
 
 ## 1. Identificação e Papel no Sistema
 

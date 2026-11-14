@@ -1,6 +1,7 @@
 # Contratos de Dados e Banco Único
 
-> **Estágio:** Especificação arquitetural pré-implementação. O schema SQL exato (`sql/`) e os modelos Pydantic v2 (`domain/`) ainda serão criados e versionados nos próximos marcos.
+!!! info "Estágio neste repositório"
+    Especificação arquitetural pré-implementação. O schema SQL exato (`sql/`) e os modelos Pydantic v2 (`domain/`) ainda serão criados e versionados nos próximos marcos.
 
 ## Separação de Camadas
 

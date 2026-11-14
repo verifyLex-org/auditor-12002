@@ -27,7 +27,8 @@ Esta página separa claramente o que **já está ativo no repositório hoje** (p
     uv run --frozen ruff check .
     uv run --frozen ruff format --check .
     uv run --frozen mypy .
-    uv run --frozen pytest -m "not llm"
+    uv run --frozen pytest -m "not llm and not e2e"
+    uv run --frozen pytest tests/e2e -m e2e
     uv run --frozen python -m scripts.check_governance
     uv run --frozen mkdocs build --strict
     ```
@@ -46,7 +47,8 @@ Esta página separa claramente o que **já está ativo no repositório hoje** (p
     make lint        # ruff check . e ruff format --check .
     make typecheck   # mypy .
     make governance  # scripts.check_governance
-    make test        # pytest -m "not llm"
+    make test        # pytest -m "not llm and not e2e"
+    make test-e2e    # pytest tests/e2e -m e2e
     make check       # executa toda a esteira local
     make docs        # mkdocs serve em 127.0.0.1:8001
     make docs-build  # mkdocs build --strict
@@ -57,7 +59,8 @@ Esta página separa claramente o que **já está ativo no repositório hoje** (p
 
 ## 2. Stack Completa de Auditoria (Planejada no `README.md`)
 
-> **Estágio:** Os comandos abaixo são a arquitetura-alvo e **ainda não funcionam de ponta a ponta**. O arquivo `compose.yml` e o `Dockerfile` existem, mas estão **vazios**; `data/` contém apenas placeholders vazios; os módulos Python são stubs.
+!!! warning "Arquitetura-alvo (comandos em roadmap)"
+    Os comandos abaixo refletem a arquitetura-alvo e **ainda não funcionam de ponta a ponta**. `compose.yml` e `Dockerfile` existem como arquivos vazios, `data/` contém placeholders e apenas `verify/manifest.py` e `scripts/check_governance.py` possuem implementação ativa; os demais módulos Python ainda são stubs.
 
 ### Pré-requisitos previstos
 

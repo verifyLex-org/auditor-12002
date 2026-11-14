@@ -1,6 +1,7 @@
 # FinOps e Eficiência Operacional Offline
 
-> **Estágio:** Especificação de custos e dimensionamento operacional baseada na arquitetura definida no `README.md` e na `ADR-003`. Medições reais de latência e consumo de VRAM serão registradas após a implementação do pipeline.
+!!! info "Estágio neste repositório"
+    Especificação de custos e dimensionamento operacional baseada na arquitetura definida no `README.md` e na `ADR-003`. Medições reais de latência e consumo de VRAM serão registradas após a implementação do pipeline.
 
 ## 1. Modelo Econômico: Zero Custo Variável de API
 

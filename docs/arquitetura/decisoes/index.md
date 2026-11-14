@@ -17,4 +17,5 @@ Este índice centraliza os **Architectural Decision Records (ADRs)** do projeto 
 | [ADR-002](adr-002-dupla-fonte-concordante.md) | Dupla fonte concordante (HTML + PDF do DOU) para achados tipográficos | Proposto (Design inicial) | 2026-11-13 |
 | [ADR-003](adr-003-banco-unico-postgres-e-ollama-offline.md) | Banco único PostgreSQL 17 e inferência local offline via Ollama | Proposto (Design inicial) | 2026-11-13 |
 
-> **Nota de status:** As ADRs iniciais refletem o desenho arquitetural consolidado no `README.md` na etapa de setup de documentação e entram em vigência operacional à medida que os módulos correspondentes forem implementados.
+!!! info "Nota de status"
+    As ADRs iniciais refletem o desenho arquitetural consolidado no `README.md` na etapa de setup de documentação e entram em vigência operacional à medida que os módulos correspondentes forem implementados.

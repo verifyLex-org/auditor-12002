@@ -20,17 +20,17 @@ hide:
     Avalia atos normativos federais publicados contra seis regras objetivas do Decreto nº 12.002/2024. Cada veredito aponta sua evidência literal ou declara por que não pôde ser emitido.
   </p>
   <div class="vlx-cta-group vlx-rv" style="animation-delay: 0.24s">
-    <a href="operacao/como-rodar/" class="vlx-btn-primary">Começar pelo quickstart <span class="vlx-arrow">→</span></a>
+    <a href="operacao/como-rodar/" class="vlx-btn-primary">Começar pelo quickstart <span class="vlx-arrow" aria-hidden="true">→</span></a>
     <a href="dominio/" class="vlx-btn-secondary">Entender o domínio e as regras</a>
   </div>
   <div class="vlx-verdict vlx-rv" style="animation-delay: 0.34s" aria-label="Exemplo ilustrativo do formato de um veredito">
-    <div class="vlx-verdict-bar"><span class="vlx-dot"></span><span class="vlx-dot"></span><span class="vlx-dot"></span><span>veredito · formato ilustrativo</span></div>
+    <div class="vlx-verdict-bar"><span class="vlx-dot" aria-hidden="true"></span><span class="vlx-dot" aria-hidden="true"></span><span class="vlx-dot" aria-hidden="true"></span><span>veredito · formato ilustrativo</span></div>
     <div class="vlx-verdict-body">
-      <div><span class="vlx-k">par</span>(ato, R3@1.0)</div>
-      <div><span class="vlx-k">estado</span><span class="vlx-badge vlx-badge--achado">ACHADO</span></div>
-      <div><span class="vlx-k">trecho</span>[trecho literal ancorado]</div>
-      <div><span class="vlx-k">offset</span>[posição no documento]</div>
-      <div><span class="vlx-k">sha256</span>[hash do trecho]<span class="vlx-caret"></span></div>
+      <div><span class="vlx-k">par</span><span class="vlx-v">(ato, R3@1.0)</span></div>
+      <div><span class="vlx-k">estado</span><span class="vlx-v"><span class="vlx-badge vlx-badge--achado">ACHADO</span></span></div>
+      <div><span class="vlx-k">trecho</span><span class="vlx-v">[trecho literal ancorado]</span></div>
+      <div><span class="vlx-k">offset</span><span class="vlx-v">[posição no documento]</span></div>
+      <div><span class="vlx-k">sha256</span><span class="vlx-v">[hash do trecho]<span class="vlx-caret" aria-hidden="true"></span></span></div>
     </div>
   </div>
 </div>
@@ -99,12 +99,12 @@ Dados não confiáveis entram por um núcleo determinístico. O LLM roda em quar
     <div class="vlx-node"><b>Spotlighting / datamarking</b>sem ferramentas, sem rede</div>
     <div class="vlx-node"><b>Maker R5/R6</b>JSON Schema · temp 0 · seed 42</div>
   </div>
-  <div class="vlx-zone">
+  <div class="vlx-zone vlx-zone--verify">
     <p class="vlx-zone-title">VERIFICAÇÃO</p>
     <div class="vlx-node"><b>Integridade byte a byte</b>e suporte do predicado</div>
     <div class="vlx-node"><b>Verificador FINAL</b>sobre o artefato renderizado</div>
   </div>
-  <span class="vlx-link vlx-link--1"></span><span class="vlx-link vlx-link--2"></span><span class="vlx-link vlx-link--3"></span>
+  <span class="vlx-link vlx-link--1" aria-hidden="true"></span><span class="vlx-link vlx-link--2" aria-hidden="true"></span><span class="vlx-link vlx-link--3" aria-hidden="true"></span>
 </div>
 
 ## Escolha seu caminho
@@ -145,14 +145,36 @@ Dados não confiáveis entram por um núcleo determinístico. O LLM roda em quar
 
 </div>
 
-!!! info "Estado atual do repositório"
+## Estado atual do repositório
 
-    | Pronto para uso | Em roadmap |
-    | --- | --- |
-    | Especificação de domínio e fronteira do Art. 76 | Pipeline de execução (`parser/`, `rules/`, `llm/`, `verify/`) |
-    | ADRs 001 a 003 e contratos de dados | Banco PostgreSQL 17 e views (`sql/`) |
-    | Pré-registro experimental (`PREREGISTRO.md`) | Execução das condições D, A, B e C (`pipeline/`, `eval/`) |
-    | CI, governança, pre-commit e portal de documentação | Corpus `data/` e painel Streamlit (`app/`) |
+<p class="vlx-section-lead">Especificação normativa, contratos de dados e governança automatizada estão prontos e auditados. Os módulos de execução e ingestão encontram-se estruturados como stubs em construção.</p>
+
+<div class="vlx-status-board vlx-reveal vlx-rv">
+  <section class="vlx-status-panel vlx-status-panel--ready" aria-labelledby="vlx-status-ready-title">
+    <div class="vlx-status-head">
+      <h3 class="vlx-status-title" id="vlx-status-ready-title">Artefatos disponíveis</h3>
+      <span class="vlx-status-pill vlx-status-pill--ready"><span class="vlx-status-dot" aria-hidden="true"></span>Pronto para uso</span>
+    </div>
+    <ul class="vlx-status-list">
+      <li><strong>Domínio e fronteira do Art. 76:</strong> escopo jurídico e catálogo <code>R1@1.0</code> a <code>R6@1.0</code> especificados.</li>
+      <li><strong>Decisões e contratos:</strong> ADRs 001 a 003, Data Card, Model Card e pré-registro em <code>PREREGISTRO.md</code>.</li>
+      <li><strong>Integridade de manifesto:</strong> gerador e verificador determinístico em <code>verify/manifest.py</code> com testes.</li>
+      <li><strong>Governança e documentação:</strong> CI, <code>scripts.check_governance</code>, hooks de pre-commit e portal MkDocs.</li>
+    </ul>
+  </section>
+  <section class="vlx-status-panel vlx-status-panel--roadmap" aria-labelledby="vlx-status-roadmap-title">
+    <div class="vlx-status-head">
+      <h3 class="vlx-status-title" id="vlx-status-roadmap-title">Entregas planejadas</h3>
+      <span class="vlx-status-pill vlx-status-pill--roadmap"><span class="vlx-status-dot" aria-hidden="true"></span>Em roadmap</span>
+    </div>
+    <ul class="vlx-status-list">
+      <li><strong>Pipeline e verificadores semânticos:</strong> módulos <code>parser/</code>, <code>rules/</code>, <code>llm/</code>, <code>retrieval/</code> e <code>verify/{evidence,terminology}.py</code>.</li>
+      <li><strong>Persistência e containerização:</strong> banco PostgreSQL 17, views em <code>sql/</code>, <code>compose.yml</code> e <code>Dockerfile</code>.</li>
+      <li><strong>Execução experimental D/A/B/C:</strong> orquestrador e métricas comparativas em <code>pipeline/</code> e <code>eval/</code>.</li>
+      <li><strong>Corpus e visualização:</strong> atos do conjunto fechado em <code>data/</code> e painel Streamlit em <code>app/</code>.</li>
+    </ul>
+  </section>
+</div>
 
 !!! note "Independência institucional"
     Projeto independente de código aberto (`verifyLex-org`), desenvolvido sobre atos públicos oficiais (Diário Oficial da União, Câmara dos Deputados e Portal da Legislação). Não possui vínculo, patrocínio ou endosso da Casa Civil, da SAJ ou da Universidade de Brasília (UnB).

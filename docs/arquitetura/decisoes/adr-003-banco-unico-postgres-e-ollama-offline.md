@@ -39,12 +39,12 @@ Adota-se:
 
 ## 4. Consequências e Trade-offs
 
-- **Positivas:** zero custo variável em nuvem, arquitetura enxuta de 3 serviços no `docker-compose.yml` (PostgreSQL 17, Ollama e Streamlit), reprodução exata via `make reproduce` e eliminação de divergência entre views SQL e relatórios.
+- **Positivas:** zero custo variável em nuvem, arquitetura enxuta de 3 serviços no `compose.yml` (PostgreSQL 17, Ollama e Streamlit), reprodução exata via `make reproduce` e eliminação de divergência entre views SQL e relatórios.
 - **Negativas e riscos:** suítes completas sem cache exigem GPU local recomendada ou tempo maior em CPU; testes automatizados em CI não podem depender de GPU.
 - **Mitigação:** o CI executará suítes unitárias, de casos difíceis, segurança (*prompt injection*) e E2E sem GPU (com dublês determinísticos / ledger), enquanto o `llm_cache` elimina re-chamadas redundantes na reprodução experimental.
 
 ## 5. Verificação e Auditoria
 
-- A configuração de rede `internal: true` no serviço Ollama será auditável diretamente no `docker-compose.yml` quando implementado.
+- A configuração de rede `internal: true` no serviço Ollama será auditável diretamente no `compose.yml` quando implementado.
 - A suíte `tests/security` testará 12 cenários de *prompt injection* indireto contra o pipeline em quarentena.
 - As views SQL em `sql/` serão a única fonte de contagem consumida pelo `Verificador FINAL` e pelo dashboard Streamlit.

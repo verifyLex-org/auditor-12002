@@ -1,6 +1,7 @@
 # Dados, Modelos e Pesquisa
 
-> **Estágio:** Documentação de desenho. Nenhum resultado experimental foi produzido; as tabelas de resultados permanecem pendentes até o congelamento do gabarito.
+!!! info "Estágio neste repositório"
+    Documentação de desenho. Nenhum resultado experimental foi produzido; as tabelas de resultados permanecem pendentes até o congelamento do gabarito.
 
 Esta seção responde a três perguntas de pesquisa reproduzível: **sobre quais dados** o sistema foi avaliado, **com qual modelo** e **sob qual protocolo** as condições foram comparadas.
 
