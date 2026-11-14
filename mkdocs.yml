@@ -60,6 +60,9 @@ theme:
 extra_css:
   - stylesheets/extra.css
 
+extra_javascript:
+  - javascripts/portal.js
+
 hooks:
   - docs_hooks/check_site.py
 

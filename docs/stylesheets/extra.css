@@ -382,7 +382,7 @@
     linear-gradient(90deg, var(--vlx-grid-line) 1px, transparent 1px);
   background-size: 44px 44px;
   mask-image: radial-gradient(ellipse 74% 82% at 50% 30%, #000 30%, transparent 76%);
-  animation: vlx-drift 28s linear infinite;
+  animation: vlx-drift 90s linear infinite;
 }
 
 .md-typeset .vlx-hero::after {
@@ -394,7 +394,7 @@
   height: 2px;
   z-index: -1;
   background: linear-gradient(90deg, transparent, var(--vlx-amber-border), transparent);
-  animation: vlx-scan 8s ease-in-out infinite;
+  animation: vlx-scan 3.2s var(--vlx-ease) 0.4s 1 both;
 }
 
 @keyframes vlx-drift {
@@ -640,7 +640,7 @@
   margin-left: 0.35rem;
   background: var(--vlx-accent);
   vertical-align: -0.12rem;
-  animation: vlx-blink 1.1s steps(1) infinite;
+  animation: vlx-blink 1.1s steps(1) 4;
 }
 
 @keyframes vlx-blink {
@@ -844,7 +844,12 @@
   pointer-events: none;
   background: repeating-linear-gradient(90deg, var(--vlx-accent) 0 5px, transparent 5px 10px);
   background-size: 10px 2px;
-  animation: vlx-flow 1.1s linear infinite;
+  animation: vlx-flow 1.1s linear infinite paused;
+}
+
+.vlx-zones:hover .vlx-link,
+.vlx-zones:focus-within .vlx-link {
+  animation-play-state: running;
 }
 
 .vlx-link::after {
@@ -1434,4 +1439,340 @@
     padding: 0;
     max-width: 100%;
   }
+}
+
+/* ==============================================================================
+   Páginas internas: revelação, cartões, linha do tempo, passos e barra de leitura
+   ============================================================================== */
+:root,
+[data-md-color-scheme="default"] {
+  --vlx-k-det: #0e6f67;
+  --vlx-k-hyb: #6b21a8;
+  --vlx-k-llm: #1d4ed8;
+}
+
+[data-md-color-scheme="slate"] {
+  --vlx-k-det: #5eead4;
+  --vlx-k-hyb: #d8b4fe;
+  --vlx-k-llm: #93c5fd;
+}
+
+/* Revelação ao rolar (a classe vlx-io é aplicada por javascripts/portal.js) */
+.vlx-io {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.45s var(--vlx-ease),
+    transform 0.45s var(--vlx-ease);
+  transition-delay: calc(min(var(--i, 0), 5) * 55ms);
+}
+
+.vlx-io.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* O JS cuida dos blocos abaixo da dobra: só os 3 primeiros entram no carregamento */
+.md-content__inner > *:nth-child(n + 4):not(.vlx-rv):not(.vlx-landing-wrap) {
+  animation: none;
+}
+
+/* Barra de progresso de leitura (sem JS; só onde há scroll-timeline) */
+@supports (animation-timeline: scroll()) {
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0 0 auto 0;
+    height: 3px;
+    z-index: 10;
+    pointer-events: none;
+    background: linear-gradient(90deg, var(--vlx-accent), var(--vlx-amber-border));
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+    animation: vlx-progress linear both;
+    animation-timeline: scroll(root);
+  }
+}
+
+@keyframes vlx-progress {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Chips de estratégia / status */
+.md-typeset .vlx-chip {
+  display: inline-block;
+  font-family: var(--md-code-font, "JetBrains Mono", monospace);
+  font-size: 0.64rem;
+  font-weight: 700;
+  line-height: 1.25;
+  padding: 0.22rem 0.6rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  --k: var(--vlx-text-secondary);
+  color: var(--k);
+  border: 1px solid color-mix(in srgb, var(--k) 55%, transparent);
+  background-color: color-mix(in srgb, var(--k) 11%, var(--vlx-surface));
+}
+.md-typeset .vlx-chip--det {
+  --k: var(--vlx-k-det);
+}
+.md-typeset .vlx-chip--hyb {
+  --k: var(--vlx-k-hyb);
+}
+.md-typeset .vlx-chip--llm {
+  --k: var(--vlx-k-llm);
+}
+.md-typeset .vlx-chip--prop {
+  --k: var(--vlx-text-secondary);
+}
+
+/* Faixa de execução por regra */
+.md-typeset .vlx-strip {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.35rem;
+  margin: 1rem 0 0.6rem;
+}
+.md-typeset .vlx-strip-seg {
+  --k: var(--vlx-k-det);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 0.2rem;
+  border-radius: 0.5rem;
+  border-bottom: 3px solid var(--k);
+  background-color: color-mix(in srgb, var(--k) 12%, var(--vlx-surface));
+}
+.md-typeset .vlx-strip-seg--hyb {
+  --k: var(--vlx-k-hyb);
+}
+.md-typeset .vlx-strip-seg--llm {
+  --k: var(--vlx-k-llm);
+}
+.md-typeset .vlx-strip-seg code {
+  background: transparent;
+  color: var(--vlx-text-primary);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0;
+}
+.md-typeset .vlx-strip-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 1.6rem;
+  font-size: 0.72rem;
+  color: var(--vlx-text-secondary);
+}
+
+/* Grade de cartões */
+.md-typeset .vlx-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  gap: 1rem;
+  margin: 1.2rem 0 1.6rem;
+}
+.md-typeset .vlx-card-grid--3 {
+  grid-template-columns: repeat(auto-fit, minmax(14.5rem, 1fr));
+}
+
+.md-typeset .vlx-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 1rem 1.1rem 1.05rem;
+  border: 1px solid var(--vlx-border);
+  border-top: 3px solid var(--vlx-accent);
+  border-radius: 0.8rem;
+  background-color: var(--vlx-surface);
+  box-shadow: var(--vlx-shadow-sm);
+  transition:
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    transform 0.22s var(--vlx-ease);
+}
+.md-typeset .vlx-card:hover {
+  border-color: var(--vlx-border-strong);
+  border-top-color: var(--vlx-accent);
+  box-shadow: var(--vlx-shadow-card-hover);
+  transform: translateY(-2px);
+}
+.md-typeset .vlx-card--ex {
+  border-top-color: var(--vlx-amber-border);
+}
+.md-typeset .vlx-card--ex:hover {
+  border-top-color: var(--vlx-amber-border);
+}
+.md-typeset .vlx-card header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+.md-typeset .vlx-card h3 {
+  margin: 0.55rem 0 0.5rem;
+  font-size: 0.92rem;
+  line-height: 1.35;
+  color: var(--vlx-text-primary);
+}
+.md-typeset .vlx-card p {
+  margin: 0.35rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--vlx-text-secondary);
+}
+.md-typeset .vlx-card p > span {
+  display: block;
+  margin-bottom: 0.1rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--vlx-text-primary);
+}
+.md-typeset .vlx-card--mod {
+  border-top-width: 1px;
+  border-left: 3px solid var(--vlx-accent);
+}
+.md-typeset .vlx-card--mod:hover {
+  border-top-color: var(--vlx-border-strong);
+}
+.md-typeset .vlx-card--mod p:first-child {
+  margin-top: 0;
+}
+.md-typeset .vlx-card--mod p:first-child code {
+  font-weight: 700;
+}
+
+/* Linha do tempo (ADRs) */
+.md-typeset ol.vlx-timeline {
+  list-style: none;
+  margin: 1.2rem 0 1.6rem;
+  padding: 0 0 0 1.5rem;
+  position: relative;
+}
+.md-typeset ol.vlx-timeline::before {
+  content: "";
+  position: absolute;
+  left: 0.42rem;
+  top: 0.4rem;
+  bottom: 0.4rem;
+  width: 2px;
+  background: linear-gradient(var(--vlx-accent), var(--vlx-border-strong));
+}
+.md-typeset .vlx-tl-item {
+  position: relative;
+  margin: 0 0 0.9rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--vlx-border);
+  border-radius: 0.7rem;
+  background-color: var(--vlx-surface);
+  box-shadow: var(--vlx-shadow-sm);
+}
+.md-typeset .vlx-tl-item::before {
+  content: "";
+  position: absolute;
+  left: -1.4rem;
+  top: 1.05rem;
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+  background: var(--vlx-surface);
+  border: 3px solid var(--vlx-accent);
+}
+.md-typeset .vlx-tl-item p {
+  margin: 0.4rem 0 0;
+}
+.md-typeset .vlx-tl-date {
+  font-family: var(--md-code-font, "JetBrains Mono", monospace);
+  font-size: 0.7rem;
+  margin-right: 0.4rem;
+  color: var(--vlx-text-secondary);
+}
+
+/* Passos numerados (defesas estruturais) */
+.md-typeset ol.vlx-steps {
+  list-style: none;
+  counter-reset: vlx-step;
+  margin: 1.2rem 0 1.6rem;
+  padding: 0;
+}
+.md-typeset .vlx-step {
+  counter-increment: vlx-step;
+  position: relative;
+  margin: 0 0 0.8rem;
+  padding: 0.8rem 1rem 0.8rem 3.4rem;
+  border: 1px solid var(--vlx-border);
+  border-radius: 0.7rem;
+  background-color: var(--vlx-surface);
+  box-shadow: var(--vlx-shadow-sm);
+}
+.md-typeset .vlx-step::before {
+  content: counter(vlx-step);
+  position: absolute;
+  left: 0.85rem;
+  top: 0.8rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: var(--vlx-btn-primary-fg);
+  background-color: var(--vlx-btn-primary-bg);
+}
+.md-typeset .vlx-step p {
+  margin: 0;
+}
+
+@media (max-width: 44.9375em) {
+  .md-typeset .vlx-strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vlx-io,
+  .vlx-io.is-in {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  body::before {
+    animation: none;
+    transform: scaleX(0);
+  }
+  .md-typeset .vlx-card:hover {
+    transform: none;
+  }
+}
+
+@media print {
+  .vlx-io,
+  .vlx-io.is-in {
+    opacity: 1;
+    transform: none;
+  }
+  body::before {
+    display: none;
+  }
+  .md-typeset .vlx-card,
+  .md-typeset .vlx-tl-item,
+  .md-typeset .vlx-step {
+    break-inside: avoid;
+    box-shadow: none;
+  }
+}
+
+/* Status de implementação (threat model) */
+.md-typeset .vlx-chip--ready {
+  --k: var(--vlx-state-conforme);
+}
+.md-typeset .vlx-chip--plan {
+  --k: var(--vlx-state-achado);
 }

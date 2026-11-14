@@ -342,3 +342,45 @@ def test_mobile_verdict_alignment_and_subpage_admonitions(open_page: OpenPage) -
         assert sub.page.locator(".md-typeset .admonition").count() >= 1
         assert sub.page.locator(".md-typeset blockquote").count() == 0
         assert sub.errors == []
+
+
+@pytest.mark.parametrize("scheme", ["light", "dark"])
+def test_rule_catalog_components_contrast_and_structure(open_page: OpenPage, scheme: str) -> None:
+    """Catálogo R1–R6: 6 cartões e 6 segmentos; chips de estratégia mantêm AA."""
+    loaded = open_page(
+        "dominio/regras-r1-r6/", viewport="desktop", scheme=scheme, reduced_motion=True
+    )
+    page = loaded.page
+    assert page.locator(".vlx-card-grid .vlx-card").count() == 6
+    assert page.locator(".vlx-strip .vlx-strip-seg").count() == 6
+    for chip in (".vlx-chip--det", ".vlx-chip--hyb", ".vlx-chip--llm"):
+        res = page.evaluate(ELEMENT_STYLE_JS, chip)
+        assert res is not None, chip
+        assert res["contrast"] >= 4.5, f"{chip} {scheme}: {res}"
+    assert loaded.errors == []
+
+
+def test_scroll_reveal_leaves_nothing_hidden(open_page: OpenPage) -> None:
+    """Com movimento ativo, a revelação ao rolar só marca blocos e todos ficam visíveis."""
+    loaded = open_page("arquitetura/", viewport="desktop", scheme="light", reduced_motion=False)
+    page = loaded.page
+    assert page.locator(".vlx-io").count() > 0
+    page.evaluate(SCROLL_THROUGH_JS)
+    page.wait_for_timeout(700)
+    assert page.locator(".vlx-io:not(.is-in)").count() == 0
+    assert loaded.page.evaluate(INVISIBLE_AFTER_SCROLL_JS) == []
+
+    reduced = open_page("arquitetura/", viewport="desktop", scheme="light", reduced_motion=True)
+    assert reduced.page.locator(".vlx-io").count() == 0
+    assert reduced.errors == []
+
+
+def test_adr_timeline_and_steps_render(open_page: OpenPage) -> None:
+    """ADRs aparecem em linha do tempo; defesas estruturais, em quatro passos."""
+    adrs = open_page("arquitetura/decisoes/", viewport="mobile", scheme="dark", reduced_motion=True)
+    assert adrs.page.locator(".vlx-timeline .vlx-tl-item").count() == 3
+    arq = open_page("arquitetura/", viewport="mobile", scheme="dark", reduced_motion=True)
+    assert arq.page.locator(".vlx-steps .vlx-step").count() == 4
+    assert arq.page.locator(".vlx-card--mod").count() == 10
+    assert adrs.errors == []
+    assert arq.errors == []

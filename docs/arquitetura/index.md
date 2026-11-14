@@ -42,25 +42,103 @@ flowchart TB
 
 ## Módulos Planejados no Repositório
 
-| Módulo | Papel na Arquitetura |
-| --- | --- |
-| `domain/` | Contratos de dados e invariantes em Pydantic v2 (sem I/O). |
-| `parser/` | Segmentação hierárquica (artigo, §, inciso, alínea, blocos citados) e detector de dupla fonte (HTML + PDF). |
-| `rules/` | Motor de aplicabilidade (`NAO_APLICAVEL`) e checkers determinísticos `R1`–`R5`. |
-| `retrieval/` | Indexação e busca lexical exata com `bm25s` (variante Lucene, `k1=1.2, b=0.75`). |
-| `llm/` | Cliente Ollama estruturado (`qwen3:8b`, JSON Schema, `temp=0`, `seed=42`) e isolamento por *spotlighting/datamarking*. |
-| `pipeline/` | CLI `typer`, ledger idempotente `llm_cache` e execução comparativa das condições `D/A/B/C`. |
-| `verify/` | Verificadores de integridade byte a byte, suporte do predicado, métricas SQL e verificador FINAL sobre o artefato renderizado. |
-| `eval/` | Cálculo de κ de Cohen, gerador de 120 mutações sintéticas, IC de Wilson (95%), *bootstrap* agrupado por ato e McNemar. |
-| `sql/` | Schema relacional no PostgreSQL 17 e views analíticas de fechamento matemático. |
-| `app/` | Dashboard analítico interativo em Streamlit offline (`http://localhost:8501`). |
+<div class="vlx-card-grid vlx-card-grid--3">
+  <article class="vlx-card vlx-card--mod" markdown>
+
+`domain/`
+
+Contratos de dados e invariantes em Pydantic v2 (sem I/O).
+
+  </article>
+  <article class="vlx-card vlx-card--mod" markdown>
+
+`parser/`
+
+Segmentação hierárquica (artigo, §, inciso, alínea, blocos citados) e detector de dupla fonte (HTML + PDF).
+
+  </article>
+  <article class="vlx-card vlx-card--mod" markdown>
+
+`rules/`
+
+Motor de aplicabilidade (`NAO_APLICAVEL`) e checkers determinísticos `R1`–`R5`.
+
+  </article>
+  <article class="vlx-card vlx-card--mod" markdown>
+
+`retrieval/`
+
+Indexação e busca lexical exata com `bm25s` (variante Lucene, `k1=1.2, b=0.75`).
+
+  </article>
+  <article class="vlx-card vlx-card--mod" markdown>
+
+`llm/`
+
+Cliente Ollama estruturado (`qwen3:8b`, JSON Schema, `temp=0`, `seed=42`) e isolamento por *spotlighting/datamarking*.
+
+  </article>
+  <article class="vlx-card vlx-card--mod" markdown>
+
+`pipeline/`
+
+CLI `typer`, ledger idempotente `llm_cache` e execução comparativa das condições `D/A/B/C`.
+
+  </article>
+  <article class="vlx-card vlx-card--mod" markdown>
+
+`verify/`
+
+Verificadores de integridade byte a byte, suporte do predicado, métricas SQL e verificador FINAL sobre o artefato renderizado.
+
+  </article>
+  <article class="vlx-card vlx-card--mod" markdown>
+
+`eval/`
+
+Cálculo de κ de Cohen, gerador de 120 mutações sintéticas, IC de Wilson (95%), *bootstrap* agrupado por ato e McNemar.
+
+  </article>
+  <article class="vlx-card vlx-card--mod" markdown>
+
+`sql/`
+
+Schema relacional no PostgreSQL 17 e views analíticas de fechamento matemático.
+
+  </article>
+  <article class="vlx-card vlx-card--mod" markdown>
+
+`app/`
+
+Dashboard analítico interativo em Streamlit offline (`http://localhost:8501`).
+
+  </article>
+</div>
 
 ## Quatro Defesas Estruturais
 
-1. **Motor de aplicabilidade antes da detecção:** impede que exceções legais ou pré-condições ausentes caiam em checkers ou no LLM, separando `NAO_APLICAVEL` e `NAO_AVALIAVEL` antes da análise substantiva (ver [ADR-001](decisoes/adr-001-maquina-estados-e-abstencao.md)).
-2. **Dupla fonte concordante:** regras sensíveis a tipografia e aspas só emitem `ACHADO` quando a evidência coincide simultaneamente na fonte primária (HTML) e na conferência oficial (PDF do DOU) (ver [ADR-002](decisoes/adr-002-dupla-fonte-concordante.md)).
-3. **LLM em quarentena contra *prompt injection*:** textos legislativos contêm linguagem imperativa (`"deverá"`, `"fica vedado"`) que não pode ser sanitizada sem destruir o objeto da auditoria. Por isso, o texto entra marcado via *spotlighting/datamarking* em um modelo sem ferramentas e em rede Docker `internal: true` (ver [Threat Model](../seguranca/threat-model.md)).
-4. **Determinismo e auditoria matemática:** chamadas ao LLM passam pelo ledger idempotente `llm_cache` no PostgreSQL 17; todo número exibido em relatórios é recomputado por views SQL e validado após a renderização final pelo `Verificador FINAL` (ver [ADR-003](decisoes/adr-003-banco-unico-postgres-e-ollama-offline.md)).
+<ol class="vlx-steps" markdown>
+<li class="vlx-step" markdown>
+
+**Motor de aplicabilidade antes da detecção:** impede que exceções legais ou pré-condições ausentes caiam em checkers ou no LLM, separando `NAO_APLICAVEL` e `NAO_AVALIAVEL` antes da análise substantiva (ver [ADR-001](decisoes/adr-001-maquina-estados-e-abstencao.md)).
+
+</li>
+<li class="vlx-step" markdown>
+
+**Dupla fonte concordante:** regras sensíveis a tipografia e aspas só emitem `ACHADO` quando a evidência coincide simultaneamente na fonte primária (HTML) e na conferência oficial (PDF do DOU) (ver [ADR-002](decisoes/adr-002-dupla-fonte-concordante.md)).
+
+</li>
+<li class="vlx-step" markdown>
+
+**LLM em quarentena contra *prompt injection*:** textos legislativos contêm linguagem imperativa (`"deverá"`, `"fica vedado"`) que não pode ser sanitizada sem destruir o objeto da auditoria. Por isso, o texto entra marcado via *spotlighting/datamarking* em um modelo sem ferramentas e em rede Docker `internal: true` (ver [Threat Model](../seguranca/threat-model.md)).
+
+</li>
+<li class="vlx-step" markdown>
+
+**Determinismo e auditoria matemática:** chamadas ao LLM passam pelo ledger idempotente `llm_cache` no PostgreSQL 17; todo número exibido em relatórios é recomputado por views SQL e validado após a renderização final pelo `Verificador FINAL` (ver [ADR-003](decisoes/adr-003-banco-unico-postgres-e-ollama-offline.md)).
+
+</li>
+</ol>
 
 ## Próximas leituras
 

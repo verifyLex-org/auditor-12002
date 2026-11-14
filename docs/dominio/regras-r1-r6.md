@@ -7,14 +7,65 @@ Todas as regras referem-se ao **Decreto nº 12.002, de 22 de abril de 2024** (co
 
 ## Visão Geral do Catálogo
 
-| ID / Versão | Regra | Fundamento no Decreto nº 12.002/2024 | Escopo e Exceção Legal | Estratégia de Execução |
-| --- | --- | --- | --- | --- |
-| `R1@1.0` | Cláusula de vigência expressa e em forma prevista | Art. 16, *caput*; art. 18, I–IV e parágrafo único | Aplica-se a todo ato do corpus | Determinística |
-| `R2@1.0` | Vedação da revogação genérica (`"revogam-se as disposições em contrário"`) | Art. 15, § 1º | Ocorrências dentro de blocos citados de outro ato não contam | Determinística |
-| `R3@1.0` | Numeração ordinal até o 9º e cardinal com ponto a partir do 10º (`Art. 10.`) | Art. 12, I, `"a"`/`"b"`, V e VI, `"a"`/`"b"` | Ignora dispositivos em blocos de alteração; valida sufixo `-A` (art. 14, parágrafo único) | Determinística (dupla fonte) |
-| `R4@1.0` | Vedação de enunciados iniciados por `"considerando"` | Art. 4º, § 3º | **Exceção explícita:** decretos de promulgação de atos internacionais | Determinística |
-| `R5@1.0` | Técnica de alteração: fórmula padrão, aspas e `"(NR)"` | Art. 14, I e VII | Somente atos que alteram outros atos | Determinística + LLM delimitado |
-| `R6@1.0` | Indicação de objeto e âmbito de aplicação nos primeiros dispositivos | Art. 6º, *caput* | **Exceção explícita:** atos meramente alteradores ou revogadores (art. 6º, parágrafo único) | LLM delimitado + verificador |
+<div class="vlx-strip vlx-reveal" role="img" aria-label="Execução por regra: R1 a R4 determinísticas, R5 híbrida, R6 com LLM delimitado">
+  <span class="vlx-strip-seg vlx-strip-seg--det"><code>R1@1.0</code></span>
+  <span class="vlx-strip-seg vlx-strip-seg--det"><code>R2@1.0</code></span>
+  <span class="vlx-strip-seg vlx-strip-seg--det"><code>R3@1.0</code></span>
+  <span class="vlx-strip-seg vlx-strip-seg--det"><code>R4@1.0</code></span>
+  <span class="vlx-strip-seg vlx-strip-seg--hyb"><code>R5@1.0</code></span>
+  <span class="vlx-strip-seg vlx-strip-seg--llm"><code>R6@1.0</code></span>
+</div>
+<p class="vlx-strip-legend"><span class="vlx-chip vlx-chip--det">Determinística</span> <span class="vlx-chip vlx-chip--hyb">Híbrida</span> <span class="vlx-chip vlx-chip--llm">LLM em quarentena</span> Quatro das seis regras nunca acionam o modelo.</p>
+
+<div class="vlx-card-grid">
+  <article class="vlx-card">
+    <header><code class="vlx-rule">R1@1.0</code><span class="vlx-chip vlx-chip--det">Determinística</span></header>
+    <h3>Cláusula de vigência expressa e em forma prevista</h3>
+    <p class="vlx-card-fund"><span>Fundamento</span>Art. 16, <em>caput</em>; art. 18, I–IV e parágrafo único</p>
+    <p class="vlx-card-note"><span>Escopo</span>Aplica-se a todo ato do corpus.</p>
+  </article>
+  <article class="vlx-card">
+    <header><code class="vlx-rule">R2@1.0</code><span class="vlx-chip vlx-chip--det">Determinística</span></header>
+    <h3>Vedação da revogação genérica (<q>revogam-se as disposições em contrário</q>)</h3>
+    <p class="vlx-card-fund"><span>Fundamento</span>Art. 15, § 1º</p>
+    <p class="vlx-card-note"><span>Ressalva</span>Ocorrências dentro de blocos citados de outro ato não contam.</p>
+  </article>
+  <article class="vlx-card">
+    <header><code class="vlx-rule">R3@1.0</code><span class="vlx-chip vlx-chip--det">Determinística · dupla fonte</span></header>
+    <h3>Numeração ordinal até o 9º e cardinal com ponto a partir do 10º (<code>Art. 10.</code>)</h3>
+    <p class="vlx-card-fund"><span>Fundamento</span>Art. 12, I, “a”/“b”, V e VI, “a”/“b”</p>
+    <p class="vlx-card-note"><span>Ressalva</span>Ignora dispositivos em blocos de alteração; valida sufixo <code>-A</code> (art. 14, parágrafo único).</p>
+  </article>
+  <article class="vlx-card vlx-card--ex">
+    <header><code class="vlx-rule">R4@1.0</code><span class="vlx-chip vlx-chip--det">Determinística</span></header>
+    <h3>Vedação de enunciados iniciados por <q>considerando</q></h3>
+    <p class="vlx-card-fund"><span>Fundamento</span>Art. 4º, § 3º</p>
+    <p class="vlx-card-note"><span>Exceção legal</span>Decretos de promulgação de atos internacionais (<code>NAO_APLICAVEL</code>).</p>
+  </article>
+  <article class="vlx-card">
+    <header><code class="vlx-rule">R5@1.0</code><span class="vlx-chip vlx-chip--hyb">Determinística + LLM delimitado</span></header>
+    <h3>Técnica de alteração: fórmula padrão, aspas e <code>(NR)</code></h3>
+    <p class="vlx-card-fund"><span>Fundamento</span>Art. 14, I e VII</p>
+    <p class="vlx-card-note"><span>Escopo</span>Somente atos que alteram outros atos.</p>
+  </article>
+  <article class="vlx-card vlx-card--ex">
+    <header><code class="vlx-rule">R6@1.0</code><span class="vlx-chip vlx-chip--llm">LLM delimitado + verificador</span></header>
+    <h3>Indicação de objeto e âmbito de aplicação nos primeiros dispositivos</h3>
+    <p class="vlx-card-fund"><span>Fundamento</span>Art. 6º, <em>caput</em></p>
+    <p class="vlx-card-note"><span>Exceção legal</span>Atos meramente alteradores ou revogadores (art. 6º, parágrafo único).</p>
+  </article>
+</div>
+
+??? note "Ver o catálogo em formato de tabela"
+
+    | ID / Versão | Regra | Fundamento no Decreto nº 12.002/2024 | Escopo e Exceção Legal | Estratégia de Execução |
+    | --- | --- | --- | --- | --- |
+    | `R1@1.0` | Cláusula de vigência expressa e em forma prevista | Art. 16, *caput*; art. 18, I–IV e parágrafo único | Aplica-se a todo ato do corpus | Determinística |
+    | `R2@1.0` | Vedação da revogação genérica (`"revogam-se as disposições em contrário"`) | Art. 15, § 1º | Ocorrências dentro de blocos citados de outro ato não contam | Determinística |
+    | `R3@1.0` | Numeração ordinal até o 9º e cardinal com ponto a partir do 10º (`Art. 10.`) | Art. 12, I, `"a"`/`"b"`, V e VI, `"a"`/`"b"` | Ignora dispositivos em blocos de alteração; valida sufixo `-A` (art. 14, parágrafo único) | Determinística (dupla fonte) |
+    | `R4@1.0` | Vedação de enunciados iniciados por `"considerando"` | Art. 4º, § 3º | **Exceção explícita:** decretos de promulgação de atos internacionais | Determinística |
+    | `R5@1.0` | Técnica de alteração: fórmula padrão, aspas e `"(NR)"` | Art. 14, I e VII | Somente atos que alteram outros atos | Determinística + LLM delimitado |
+    | `R6@1.0` | Indicação de objeto e âmbito de aplicação nos primeiros dispositivos | Art. 6º, *caput* | **Exceção explícita:** atos meramente alteradores ou revogadores (art. 6º, parágrafo único) | LLM delimitado + verificador |
 
 ---
 
