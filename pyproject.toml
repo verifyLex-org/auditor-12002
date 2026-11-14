@@ -3,31 +3,57 @@ name = "auditor-12002"
 version = "0.1.0"
 description = "Assistente auditável de revisão de técnica legislativa sob o Decreto nº 12.002/2024."
 readme = "README.md"
-requires-python = ">=3.12,<3.15"
-dependencies = []
-
-[tool.uv]
-package = false
-default-groups = ["dev", "docs"]
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "psycopg[binary]>=3.2,<4",
+    "pydantic>=2,<3",
+    "bm25s>=0.2,<1",
+    "streamlit>=1.40,<2",
+    "typer>=0.15,<1",
+    "statsmodels>=0.14,<1",
+    "scikit-learn>=1.6,<2",
+    "pandas>=2.2,<3",
+    "numpy>=1.26,<3",
+    "ollama>=0.4,<1",
+]
 
 [dependency-groups]
+dev = [
+    "ruff>=0.11,<1",
+    "pytest>=8,<10",
+    "mypy>=1.15,<3",
+    "pre-commit>=4,<5",
+]
 docs = [
     "mkdocs>=1.6,<2",
     "mkdocs-material>=9.5,<10",
     "mkdocs-git-revision-date-localized-plugin>=1.4,<2",
 ]
-dev = [
-    "pre-commit>=3.8",
-    "ruff>=0.6",
-]
+
+[tool.uv]
+package = false
+default-groups = ["dev", "docs"]
 
 [tool.ruff]
-line-length = 100
 target-version = "py312"
+line-length = 100
 extend-exclude = ["docs", "site"]
 
 [tool.ruff.lint]
-select = ["E", "F", "I", "B", "UP", "SIM"]
+select = ["E4", "E7", "E9", "F", "I"]
 
 [tool.ruff.format]
 quote-style = "double"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "--strict-markers"
+markers = [
+    "llm: exige Ollama e o modelo instalado",
+]
+
+[tool.mypy]
+python_version = "3.12"
+check_untyped_defs = true
+warn_unused_ignores = true

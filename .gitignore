@@ -1,49 +1,63 @@
-# ==============================================================================
-# Auditor 12.002 - Git Ignore
-# ==============================================================================
-
-# Python e ambientes virtuais
+# Python e ferramentas
+.venv/
+venv/
+env/
+ENV/
+.uv-cache/
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
-.venv/
-venv/
-env/
-ENV/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage*
+htmlcov/
+coverage.xml
 build/
 dist/
 *.egg-info/
-
-# Ferramentas de qualidade e testes
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-.coverage
-htmlcov/
-coverage.xml
 
 # Documentação (build estático e cache do plugin privacy)
 /site/
 .cache/
 
-# Segredos e variáveis locais
+# Configuração local, chaves e credenciais
 .env
 .env.*
 !.env.example
-*.pem
-*.key
+.streamlit/secrets.toml
+**/credentials*
+**/secrets/
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
 
-# Dados locais, volumes de containers e bancos temporários
+# Dados locais, volumes de containers e saídas
+.local/
+artifacts/
 postgres_data/
 ollama_data/
 *.sqlite
 *.sqlite3
+data/inbox/
+data/private/
+data/annotations/
+data/cache/
+data/derived/
+data/results/
+*.age
+*.tmp
+*.bak
+*.part
+*.crdownload
 *.log
 logs/
-
-# Editores e sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
 .idea/
 .vscode/*
 !.vscode/settings.json
@@ -51,6 +65,12 @@ logs/
 *.swp
 *.swo
 *~
-.DS_Store
-Thumbs.db
-desktop.ini
+
+# Lista de permissões para os documentos brutos.
+# O verificador do manifesto também rejeita arquivos rastreados fora desta lista.
+/data/raw/*
+!/data/raw/*/
+/data/raw/*/*
+!/data/raw/*/original.html
+!/data/raw/*/conferencia.pdf
+!/data/raw/*/original.xml
