@@ -27,8 +27,8 @@ flowchart LR
 | `TM-03` | **Alucinação de trecho ou offset** para justificar `ACHADO` | Saída estruturada do Maker `R5`/`R6` | **Verificador de integridade byte a byte** + suporte do predicado; qualquer citação inexistente rebaixa para `NAO_AVALIAVEL` | Planejado (`verify/`) |
 | `TM-04` | **Divergência entre fonte HTML e PDF oficial** | Extração de `R3`/`R5` | **Dupla fonte concordante**: divergência força abstenção `NAO_AVALIAVEL` | Planejado (`parser/`) |
 | `TM-05` | **Manipulação pós-hoc de métricas ou números exibidos** | Relatórios e UI Streamlit | Recomputação exclusiva via **views SQL no PostgreSQL 17** e validação pós-renderização no `Verificador FINAL` | Planejado (`sql/`, `verify/`) |
-| `TM-06` | **Adulteração do corpus ou gabarito após congelamento** | `data/raw/`, `manifesto.csv`, `gold-v1.csv` | Validação criptográfica `MANIFEST.sha256` e bloqueio de PRs em CI após o congelamento | Planejado (`Makefile`, CI) |
-| `TM-07` | **Scripts ou requisições externas na documentação** | Portal MkDocs estático | Plugin `privacy` (assets embutidos no build) e hook `docs_hooks/check_site.py` bloqueando `<script src>` externo | **Ativo no setup de docs** |
+| `TM-06` | **Adulteração do corpus ou gabarito após congelamento** | `data/raw/`, `manifesto.csv`, `gold-v1.csv` | Validação criptográfica `MANIFEST.sha256` (`verify/`) e guarda automática em PR no CI (`.github/workflows/ci.yml` + `scripts.check_governance`) | **Guarda de PR ativo no CI**; `verify.manifest` planejado (`verify/`) |
+| `TM-07` | **Scripts, segredos ou Actions não confiáveis no repo/docs** | Portal MkDocs e esteira GitHub Actions | Plugin `privacy`, hook `docs_hooks/check_site.py`, *pinning* por SHA completo, `gitleaks` via `pre-commit` e CodeQL padrão | **Ativo no CI e no build de docs** |
 
 ## 3. Bateria Planejada de Testes de Segurança (`tests/security`)
 

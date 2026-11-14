@@ -1,0 +1,35 @@
+# Code Owners — Auditor 12.002
+# Qualquer PR exige revisão explícita dos mantenedores da área afetada.
+
+# Padrão global do repositório
+* @pedrohpsantos @joaovpsant0s
+
+# Governança, CI/CD, dependências e infraestrutura
+/.github/ @pedrohpsantos @joaovpsant0s
+/scripts/ @pedrohpsantos @joaovpsant0s
+/pyproject.toml @pedrohpsantos @joaovpsant0s
+/uv.lock @pedrohpsantos @joaovpsant0s
+/Makefile @pedrohpsantos @joaovpsant0s
+/.pre-commit-config.yaml @pedrohpsantos @joaovpsant0s
+/Dockerfile @pedrohpsantos @joaovpsant0s
+/compose.yml @pedrohpsantos @joaovpsant0s
+/CONTRIBUTING.md @pedrohpsantos @joaovpsant0s
+/SECURITY.md @pedrohpsantos @joaovpsant0s
+
+# Alta criticidade: pré-registro experimental, corpus congelado e verificadores
+/PREREGISTRO.md @pedrohpsantos @joaovpsant0s
+/data/ @pedrohpsantos @joaovpsant0s
+/verify/ @pedrohpsantos @joaovpsant0s
+/eval/ @pedrohpsantos @joaovpsant0s
+
+# Núcleo de domínio, regras, LLM em quarentena e banco
+/domain/ @pedrohpsantos @joaovpsant0s
+/rules/ @pedrohpsantos @joaovpsant0s
+/llm/ @pedrohpsantos @joaovpsant0s
+/sql/ @pedrohpsantos @joaovpsant0s
+/tests/security/ @pedrohpsantos @joaovpsant0s
+
+# Portal de documentação e ADRs
+/docs/ @pedrohpsantos @joaovpsant0s
+/docs_hooks/ @pedrohpsantos @joaovpsant0s
+/mkdocs.yml @pedrohpsantos @joaovpsant0s

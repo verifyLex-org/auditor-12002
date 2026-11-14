@@ -1,0 +1,29 @@
+name: Proposta de ADR (Decisão Arquitetural)
+description: Alinhe mudanças estruturais antes da implementação seguindo docs/_templates/adr.md.
+title: "[ADR] "
+labels:
+  - documentation
+body:
+  - type: textarea
+    id: context
+    attributes:
+      label: Contexto e Problema
+      description: Qual decisão técnica precisa ser tomada e quais restrições legais/técnicas estão envolvidas?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternativas Consideradas e Trade-offs
+      description: Liste ao menos duas opções viáveis, custos de 2ª ordem e justificativa da opção recomendada.
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Aderência aos Princípios do Projeto
+      options:
+        - label: "Preserva execução offline (`internal: true`) e verificação determinística antes da entrega ao usuário"
+          required: true
+        - label: Preserva a fronteira do Art. 76 do Decreto nº 12.002/2024
+          required: true

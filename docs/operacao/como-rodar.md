@@ -21,11 +21,14 @@ Esta página separa claramente o que **já está ativo no repositório hoje** (p
 
     Acesse `http://127.0.0.1:8001` no navegador. No primeiro build com o plugin `privacy` ativo, é necessário acesso à internet para baixar e embutir as fontes localmente em `site/`.
 
-=== "Build Estrito e Qualidade"
+=== "Qualidade, Tipagem, Governança e Build"
 
     ```bash
-    uv run --frozen ruff check docs_hooks/
-    uv run --frozen ruff format --check docs_hooks/
+    uv run --frozen ruff check .
+    uv run --frozen ruff format --check .
+    uv run --frozen mypy .
+    uv run --frozen pytest -m "not llm"
+    uv run --frozen python -m scripts.check_governance
     uv run --frozen mkdocs build --strict
     ```
 
@@ -39,8 +42,12 @@ Esta página separa claramente o que **já está ativo no repositório hoje** (p
 === "Atalhos via Makefile"
 
     ```bash
-    make setup       # uv sync --locked
-    make lint        # ruff check/format em docs_hooks/
+    make setup       # uv python install 3.12 + uv sync --locked + hooks
+    make lint        # ruff check . e ruff format --check .
+    make typecheck   # mypy .
+    make governance  # scripts.check_governance
+    make test        # pytest -m "not llm"
+    make check       # executa toda a esteira local
     make docs        # mkdocs serve em 127.0.0.1:8001
     make docs-build  # mkdocs build --strict
     make clean       # remove site/, .cache/ e .ruff_cache/

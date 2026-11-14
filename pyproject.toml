@@ -3,6 +3,7 @@ name = "auditor-12002"
 version = "0.1.0"
 description = "Assistente auditável de revisão de técnica legislativa sob o Decreto nº 12.002/2024."
 readme = "README.md"
+license = "MIT"
 requires-python = ">=3.12,<3.13"
 dependencies = [
     "psycopg[binary]>=3.2,<4",
@@ -40,7 +41,10 @@ line-length = 100
 extend-exclude = ["docs", "site"]
 
 [tool.ruff.lint]
-select = ["E4", "E7", "E9", "F", "I"]
+select = ["E4", "E7", "E9", "F", "I", "B", "UP", "S"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]
 
 [tool.ruff.format]
 quote-style = "double"
@@ -56,4 +60,8 @@ markers = [
 [tool.mypy]
 python_version = "3.12"
 check_untyped_defs = true
+disallow_untyped_defs = true
 warn_unused_ignores = true
+warn_return_any = true
+warn_redundant_casts = true
+no_implicit_reexport = true

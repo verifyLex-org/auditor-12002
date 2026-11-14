@@ -10,16 +10,12 @@ Guia essencial de colaboração no repositório `verifyLex-org/auditor-12002`. A
 4. **Honestidade empírica:** nunca invente números, resultados de benchmarks, métricas de precisão/*recall* ou dispositivos legais inexistentes. Enquanto uma etapa não for implementada ou executada, marque seu status explicitamente.
 5. **Segredos nunca entram no Git:** use variáveis de ambiente fora do controle de versão (`.env` está no `.gitignore`).
 
-## Commits
+## Branches, Commits e Pull Requests
 
-Adote **Conventional Commits** em português com descrição curta no imperativo:
-
-```text
-tipo(escopo): descrição curta no imperativo
-```
-
-- **Tipos:** `feat`, `fix`, `docs`, `test`, `refactor`, `chore`, `ci`, `perf`.
-- **Escopos sugeridos:** `docs`, `domain`, `parser`, `rules`, `retrieval`, `llm`, `pipeline`, `verify`, `eval`, `sql`, `app`, `infra`, `data`.
+- **Padrão de branches:** `<tipo>/<issue>-<tema>` usando um dos prefixos `feat`, `fix`, `docs`, `sec`, `ci`, `chore`, `refactor`, `test` ou `hotfix` (ex.: `feat/12-regra-r1`, `sec/18-injection-guard`).
+- **Commits e título de PR:** adote **Conventional Commits** em português com descrição curta no imperativo (`tipo(escopo): descrição curta`):
+  - **Tipos:** `feat`, `fix`, `docs`, `test`, `refactor`, `chore`, `ci`, `perf`, `sec`.
+  - **Escopos sugeridos:** `docs`, `domain`, `parser`, `rules`, `retrieval`, `llm`, `pipeline`, `verify`, `eval`, `sql`, `app`, `infra`, `data`, `deps`.
 
 Exemplos:
 
@@ -29,18 +25,24 @@ docs(adr): registra ADR-002 sobre dupla fonte concordante
 ci(docs): configura build estrito do MkDocs no GitHub Actions
 ```
 
+- **Revisão e propriedade:** o arquivo `.github/CODEOWNERS` define revisores obrigatórios por área sensível (`PREREGISTRO.md`, `data/`, `verify/`, `rules/`, `llm/`, `sql/`, `.github/`). O envio de código para `main` deve ocorrer via Pull Request usando `.github/PULL_REQUEST_TEMPLATE.md` e templates estruturados em `.github/ISSUE_TEMPLATE/`.
+- **Segurança:** vulnerabilidades não devem ser abertas como issue pública; siga as instruções de divulgação coordenada em `SECURITY.md`.
+
 ## Fluxo de Pull Requests e Qualidade
 
-Antes de abrir um PR alterando documentação ou scripts de apoio:
+Antes de abrir um PR, execute a bateria completa verificada pelo CI (`.github/workflows/ci.yml` e `.github/workflows/docs.yml`):
 
 ```bash
 uv sync --locked
-uv run --frozen ruff check docs_hooks/
-uv run --frozen ruff format --check docs_hooks/
+uv run --frozen ruff check .
+uv run --frozen ruff format --check .
+uv run --frozen mypy .
+uv run --frozen pytest -m "not llm"
+uv run --frozen python -m scripts.check_governance
 uv run --frozen mkdocs build --strict
 ```
 
-Se tiver o `pre-commit` instalado localmente:
+Ou via `pre-commit` (inclui `gitleaks`, `check-yaml`, `check-toml`, `detect-private-key` e `ruff`):
 
 ```bash
 uv run --frozen pre-commit run --all-files
