@@ -1,0 +1,56 @@
+# ==============================================================================
+# Auditor 12.002 - Git Ignore
+# ==============================================================================
+
+# Python e ambientes virtuais
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+ENV/
+build/
+dist/
+*.egg-info/
+
+# Ferramentas de qualidade e testes
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# Documentação (build estático e cache do plugin privacy)
+/site/
+.cache/
+
+# Segredos e variáveis locais
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Dados locais, volumes de containers e bancos temporários
+postgres_data/
+ollama_data/
+*.sqlite
+*.sqlite3
+*.log
+logs/
+
+# Editores e sistema operacional
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini

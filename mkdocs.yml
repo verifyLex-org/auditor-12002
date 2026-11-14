@@ -1,0 +1,130 @@
+site_name: "Auditor 12.002"
+site_description: "Assistente auditável de revisão de técnica legislativa sob o Decreto nº 12.002/2024, 100% offline e com abstenção determinística."
+site_url: "https://verifylex-org.github.io/auditor-12002/"
+repo_url: "https://github.com/verifyLex-org/auditor-12002"
+repo_name: "verifyLex-org/auditor-12002"
+edit_uri: "edit/main/docs/"
+docs_dir: docs
+strict: true
+
+# Templates ficam versionados no repositório, mas não geram páginas públicas no site.
+exclude_docs: |
+  _templates/
+
+theme:
+  name: material
+  language: pt-BR
+  font:
+    text: Inter
+    code: JetBrains Mono
+  icon:
+    logo: material/scale-balance
+    repo: fontawesome/brands/github
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-night
+        name: Mudar para o modo escuro
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: Mudar para o modo claro
+  features:
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.instant.progress
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.indexes
+    - navigation.path
+    - navigation.top
+    - navigation.footer
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.tabs.link
+    - content.action.edit
+
+extra_css:
+  - stylesheets/extra.css
+
+hooks:
+  - docs_hooks/check_site.py
+
+plugins:
+  - search:
+      lang: pt
+  # Embute fontes e recursos externos no build para execução 100% offline sem requisições externas.
+  - privacy
+  - git-revision-date-localized:
+      enable_creation_date: false
+      fallback_to_build_date: true
+      strict: false
+      type: timeago
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets:
+      base_path: ['.']
+      check_paths: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+nav:
+  - Início: index.md
+  - Domínio & Regras:
+      - dominio/index.md
+      - Catálogo R1–R6: dominio/regras-r1-r6.md
+      - Fronteira jurídica (Art. 76): dominio/fronteira-art76.md
+  - Arquitetura:
+      - arquitetura/index.md
+      - Contratos e banco único: arquitetura/contratos-e-dados.md
+      - Decisões (ADRs):
+          - arquitetura/decisoes/index.md
+          - "ADR-001 — Máquina de 4 estados e aplicabilidade": arquitetura/decisoes/adr-001-maquina-estados-e-abstencao.md
+          - "ADR-002 — Dupla fonte concordante": arquitetura/decisoes/adr-002-dupla-fonte-concordante.md
+          - "ADR-003 — Banco único e Ollama offline": arquitetura/decisoes/adr-003-banco-unico-postgres-e-ollama-offline.md
+  - Dados & Modelos:
+      - Data Card: dados-e-modelos/DATA_CARD.md
+      - Model Card: dados-e-modelos/MODEL_CARD.md
+      - Protocolo D/A/B/C: dados-e-modelos/protocolo-experimental.md
+  - Segurança & FinOps:
+      - Threat Model: seguranca/threat-model.md
+      - FinOps e Hardware: seguranca/FINOPS.md
+  - Operação:
+      - Demo (Roteiro): operacao/DEMO.md
+      - Como rodar: operacao/como-rodar.md
+      - Contribuir: operacao/contribuir.md
