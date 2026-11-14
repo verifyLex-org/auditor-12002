@@ -20,7 +20,7 @@ REQUIRED_GOVERNANCE_FILES: tuple[str, ...] = (
     ".github/PULL_REQUEST_TEMPLATE.md",
     ".github/dependabot.yml",
     ".github/ISSUE_TEMPLATE/config.yml",
-    ".github/ISSUE_TEMPLATE/tarefa_sprint.yml",
+    ".github/ISSUE_TEMPLATE/tarefa_sprint.md",
     ".github/ISSUE_TEMPLATE/bug_report.yml",
     ".github/ISSUE_TEMPLATE/proposta_adr.yml",
     ".github/workflows/ci.yml",
