@@ -9,13 +9,16 @@ As regras de colaboração deste repositório protegem três pilares do **Audito
 3. **Preservação da quarentena:** mantenha os textos normativos como dados não confiáveis (somente leitura), preserve o *spotlighting/datamarking*, mantenha o Ollama em rede `internal: true` e não conceda ferramentas ao LLM.
 4. **Honestidade técnica:** nunca invente números de avaliação, métricas ou resultados não executados. Utilize sempre o estado explícito quando algo estiver pendente de implementação ou rodada.
 
-## Padrão de Commits e Pull Requests
+## Padrão de Branches, Commits e Pull Requests
 
-- Utilize **Conventional Commits** em português (`tipo(escopo): descrição curta no imperativo`):
+- Utilize **branches padronizadas** (`feat/<issue>-<tema>`, `fix/<issue>-<tema>`, `docs/<issue>-<tema>`, `sec/<issue>-<tema>`, `ci/<issue>-<tema>`) e **Conventional Commits** em português (`tipo(escopo): descrição curta no imperativo`):
   - Exemplos: `docs(adr): adiciona ADR-003 sobre banco único`, `feat(rules): implementa checker R1@1.0`.
-- Antes de abrir um Pull Request, valide localmente os checks ativos no repositório (ver [Como Rodar](como-rodar.md)):
-  - `uv run --frozen ruff check docs_hooks/`
-  - `uv run --frozen ruff format --check docs_hooks/`
+- O repositório adota **governança formal** via `.github/CODEOWNERS`, `.github/PULL_REQUEST_TEMPLATE.md`, formulários de issue em `.github/ISSUE_TEMPLATE/`, política de divulgação coordenada em `SECURITY.md` e atualizações automatizadas em `.github/dependabot.yml`.
+- Antes de abrir um Pull Request, valide localmente os checks exigidos pelo CI (`.github/workflows/ci.yml` e `.github/workflows/docs.yml`, ver [Como Rodar](como-rodar.md)):
+  - `uv run --frozen ruff check .` e `uv run --frozen ruff format --check .`
+  - `uv run --frozen mypy .`
+  - `uv run --frozen pytest -m "not llm"`
+  - `uv run --frozen python -m scripts.check_governance`
   - `uv run --frozen mkdocs build --strict`
 
 ## Padrões de Escrita na Documentação

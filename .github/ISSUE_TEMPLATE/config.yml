@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Política de Segurança (Reportar Vulnerabilidade Privada)
+    url: https://github.com/verifyLex-org/auditor-12002/security/advisories/new
+    about: Nunca publique vulnerabilidades ou ataques de prompt injection em issues públicas.
+  - name: Portal de Documentação
+    url: https://verifylex-org.github.io/auditor-12002/
+    about: Consulte regras R1–R6, ADRs, Data/Model Cards e instruções de execução antes de abrir uma issue.

@@ -7,15 +7,9 @@ edit_uri: "edit/main/docs/"
 docs_dir: docs
 strict: true
 
-# Templates e placeholders vazios do esqueleto inicial não geram páginas públicas no site.
+# Templates internos não geram páginas públicas no site.
 exclude_docs: |
   _templates/
-  anotacao.md
-  arquitetura.md
-  avaliacao.md
-  corpus.md
-  reproducao.md
-  seguranca.md
 
 theme:
   name: material

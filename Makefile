@@ -1,11 +1,14 @@
-.PHONY: help setup hooks lint test test-sec verify-manifest up reproduce docs docs-build clean
+.PHONY: help setup hooks lint typecheck governance test test-sec verify-manifest check up reproduce docs docs-build clean
 
 help:
 	@echo "Comandos disponiveis (Auditor 12.002):"
 	@echo "  make setup            - Instala Python 3.12, sincroniza dependencias e hooks"
 	@echo "  make hooks            - Instala os hooks pre-commit no clone local"
 	@echo "  make lint             - Executa ruff check e ruff format --check"
+	@echo "  make typecheck        - Executa verificacao estatica de tipos com mypy"
+	@echo "  make governance       - Valida artefatos de governanca e workflows SHA-pinados"
 	@echo "  make test             - Roda suite de testes sem LLM (pytest -m 'not llm')"
+	@echo "  make check            - Executa lint, typecheck, governance, test e docs-build"
 	@echo "  make test-sec         - Roda bateria de seguranca (tests/security)"
 	@echo "  make verify-manifest  - Valida manifesto do corpus"
 	@echo "  make up               - Sobe containers com docker compose"
@@ -26,8 +29,16 @@ lint:
 	uv run --no-sync ruff check .
 	uv run --no-sync ruff format --check .
 
+typecheck:
+	uv run --no-sync mypy .
+
+governance:
+	uv run --no-sync python -m scripts.check_governance
+
 test:
 	uv run --no-sync pytest -m "not llm"
+
+check: lint typecheck governance test docs-build
 
 test-sec:
 	uv run --no-sync pytest tests/security -m "not llm"

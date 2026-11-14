@@ -1,0 +1,55 @@
+name: Relato de Bug
+description: Reporte comportamento inesperado, falso positivo/negativo ou falha de pipeline sem expor vulnerabilidades sensíveis.
+title: "[Bug] "
+labels:
+  - bug
+body:
+  - type: dropdown
+    id: module
+    attributes:
+      label: Componente afetado
+      options:
+        - parser
+        - rules
+        - retrieval
+        - llm
+        - verify
+        - eval
+        - sql
+        - app / UI
+        - docs / mkdocs
+        - CI / governança
+    validations:
+      required: true
+  - type: dropdown
+    id: state_observed
+    attributes:
+      label: Estado observado da máquina de decisão (se aplicável)
+      options:
+        - N/A (erro técnico / CI / UI)
+        - CONFORME
+        - ACHADO
+        - NAO_APLICAVEL
+        - NAO_AVALIAVEL
+  - type: textarea
+    id: description
+    attributes:
+      label: Comportamento observado vs. esperado
+      description: Inclua o comando exato ou cenário que reproduz o erro e o resultado esperado.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Passos para Reprodução e Evidência
+      description: Cole logs relevantes (remova qualquer dado local sensível antes de enviar).
+      render: text
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Ambiente (SO, versão Python/uv/Docker)
+      placeholder: "Ex.: Windows 11 / Ubuntu 24.04, Python 3.12.10, uv 0.11.x"
+    validations:
+      required: true

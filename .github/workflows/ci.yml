@@ -1,0 +1,141 @@
+name: CI
+
+# Esteira principal de integração contínua e governança do Auditor 12.002.
+# Actions externas pinadas por SHA completo com permissões mínimas (contents: read).
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  merge_group:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  quality:
+    name: Qualidade (Ruff & Mypy)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with:
+          python-version: "3.12"
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - name: Verificar integridade do lockfile
+        run: uv lock --check
+
+      - name: Sincronizar ambiente com lockfile
+        run: uv sync --locked
+
+      - name: Lint Python (Ruff)
+        run: uv run --frozen ruff check .
+
+      - name: Formatação Python (Ruff)
+        run: uv run --frozen ruff format --check .
+
+      - name: Checagem de tipos (Mypy)
+        run: uv run --frozen mypy .
+
+  test:
+    name: Testes Unitários
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with:
+          python-version: "3.12"
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - name: Sincronizar ambiente com lockfile
+        run: uv sync --locked
+
+      - name: Executar suíte sem LLM
+        run: uv run --frozen pytest -m "not llm"
+
+  governance:
+    name: Governança e Integridade
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with:
+          python-version: "3.12"
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - name: Sincronizar ambiente com lockfile
+        run: uv sync --locked
+
+      - name: Validar configuração do pre-commit
+        run: uv run --frozen pre-commit validate-config .pre-commit-config.yaml
+
+      - name: Verificar governança, SHA-pinning e congelamento
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_HEAD_REF: ${{ github.head_ref }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ] && [ -n "$BASE_SHA" ] && [ -n "$HEAD_SHA" ]; then
+            export CHANGED_FILES
+            CHANGED_FILES="$(git diff --name-only "$BASE_SHA" "$HEAD_SHA")"
+            BASE_MANIFEST_CONTENT="$(git show "${BASE_SHA}:data/MANIFEST.sha256" 2>/dev/null || true)"
+            if [ -n "${BASE_MANIFEST_CONTENT//[[:space:]]/}" ]; then
+              export BASE_MANIFEST_NONEMPTY="true"
+            else
+              export BASE_MANIFEST_NONEMPTY="false"
+            fi
+          else
+            unset PR_TITLE PR_HEAD_REF CHANGED_FILES BASE_MANIFEST_NONEMPTY
+          fi
+          uv run --frozen python -m scripts.check_governance
+
+  hygiene-secrets:
+    name: Higiene e Segredos (Pre-commit & Gitleaks)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with:
+          python-version: "3.12"
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-v1-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml') }}
+
+      - name: Sincronizar ambiente com lockfile
+        run: uv sync --locked
+
+      - name: Executar hooks de higiene, formatação e Gitleaks
+        run: uv run --frozen pre-commit run --all-files --show-diff-on-failure
