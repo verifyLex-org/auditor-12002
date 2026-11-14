@@ -1,4 +1,4 @@
-.PHONY: help setup hooks lint typecheck governance test test-sec verify-manifest check up reproduce docs docs-build clean
+.PHONY: help setup hooks lint typecheck governance test test-e2e test-sec verify-manifest check up reproduce docs docs-build clean
 
 help:
 	@echo "Comandos disponiveis (Auditor 12.002):"
@@ -7,7 +7,8 @@ help:
 	@echo "  make lint             - Executa ruff check e ruff format --check"
 	@echo "  make typecheck        - Executa verificacao estatica de tipos com mypy"
 	@echo "  make governance       - Valida artefatos de governanca e workflows SHA-pinados"
-	@echo "  make test             - Roda suite de testes sem LLM (pytest -m 'not llm')"
+	@echo "  make test             - Roda suite de testes sem LLM e sem E2E"
+	@echo "  make test-e2e         - Compila o portal e roda os testes E2E (Playwright)"
 	@echo "  make check            - Executa lint, typecheck, governance, test e docs-build"
 	@echo "  make test-sec         - Roda bateria de seguranca (tests/security)"
 	@echo "  make verify-manifest  - Valida manifesto do corpus"
@@ -36,7 +37,11 @@ governance:
 	uv run --no-sync python -m scripts.check_governance
 
 test:
-	uv run --no-sync pytest -m "not llm"
+	uv run --no-sync pytest -m "not llm and not e2e"
+
+test-e2e: docs-build
+	uv run --no-sync playwright install --only-shell chromium
+	uv run --no-sync pytest tests/e2e -m e2e
 
 check: lint typecheck governance test docs-build
 

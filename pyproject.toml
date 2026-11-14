@@ -30,10 +30,13 @@ docs = [
     "mkdocs-material>=9.5,<10",
     "mkdocs-git-revision-date-localized-plugin>=1.4,<2",
 ]
+e2e = [
+    "playwright>=1.50,<2",
+]
 
 [tool.uv]
 package = false
-default-groups = ["dev", "docs"]
+default-groups = ["dev", "docs", "e2e"]
 
 [tool.ruff]
 target-version = "py312"
@@ -55,6 +58,7 @@ pythonpath = ["."]
 addopts = "--strict-markers"
 markers = [
     "llm: exige Ollama e o modelo instalado",
+    "e2e: exige o site compilado (mkdocs build) e o Chromium do Playwright",
 ]
 
 [tool.mypy]

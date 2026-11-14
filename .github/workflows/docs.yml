@@ -9,6 +9,7 @@ on:
     paths:
       - "docs/**"
       - "docs_hooks/**"
+      - "tests/e2e/**"
       - "mkdocs.yml"
       - "pyproject.toml"
       - "uv.lock"
@@ -20,6 +21,7 @@ on:
     paths:
       - "docs/**"
       - "docs_hooks/**"
+      - "tests/e2e/**"
       - "mkdocs.yml"
       - "pyproject.toml"
       - "uv.lock"
@@ -39,7 +41,7 @@ jobs:
   build:
     name: Build estrito da documentação
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -62,6 +64,12 @@ jobs:
 
       - name: Compilar site MkDocs (--strict)
         run: uv run --frozen mkdocs build --strict
+
+      - name: Instalar Chromium do Playwright
+        run: uv run --frozen playwright install --with-deps --only-shell chromium
+
+      - name: Testes E2E do portal (layout, contraste, erros)
+        run: uv run --frozen pytest tests/e2e -m e2e
 
       - name: Configurar e enviar artefato do GitHub Pages
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'

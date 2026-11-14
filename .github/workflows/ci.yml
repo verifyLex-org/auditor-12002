@@ -82,7 +82,7 @@ jobs:
         run: uv sync --locked
 
       - name: Executar suíte sem LLM
-        run: uv run --frozen pytest -m "not llm"
+        run: uv run --frozen pytest -m "not llm and not e2e"
         env:
           AUDITOR_TEST_DSN: postgresql://auditor:ci-test-only@127.0.0.1:${{ job.services.postgres.ports[5432] }}/auditor
 
