@@ -23,7 +23,7 @@ body:
     attributes:
       label: Aderência aos Princípios do Projeto
       options:
-        - label: Preserva execução offline (`internal: true`) e verificação determinística antes da entrega ao usuário
+        - label: "Preserva execução offline (`internal: true`) e verificação determinística antes da entrega ao usuário"
           required: true
         - label: Preserva a fronteira do Art. 76 do Decreto nº 12.002/2024
           required: true
