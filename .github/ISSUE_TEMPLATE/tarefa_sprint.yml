@@ -1,71 +1,24 @@
-name: Tarefa de Sprint / Implementação
-description: Planejamento de entrega rastreável em módulo, regra ou documentação do Auditor 12.002.
-title: "[Sprint] "
-labels:
-  - enhancement
-body:
-  - type: markdown
-    attributes:
-      value: |
-        Descreva uma entrega pequena e verificável. Use o padrão de branch `feat/<issue>-<tema>`, `docs/<issue>-<tema>` ou `sec/<issue>-<tema>`.
-  - type: dropdown
-    id: scope
-    attributes:
-      label: Módulo / Escopo principal
-      options:
-        - domain
-        - parser
-        - rules
-        - retrieval
-        - llm
-        - verify
-        - eval
-        - sql
-        - app
-        - docs
-        - infra / ci
-        - data
-    validations:
-      required: true
-  - type: dropdown
-    id: rule
-    attributes:
-      label: Regra do Decreto nº 12.002/2024 relacionada
-      options:
-        - N/A (infraestrutura / transversal)
-        - R1@1.0 — Epígrafe / identificação normativa
-        - R2@1.0 — Ementa
-        - R3@1.0 — Estrutura e numeração de artigos/dispositivos
-        - R4@1.0 — Cláusula de vigência e vacância
-        - R5@1.0 — Clareza, precisão e ordem lógica
-        - R6@1.0 — Referências internas e remissões
-        - Todas (R1–R6)
-    validations:
-      required: true
-  - type: textarea
-    id: objective
-    attributes:
-      label: Objetivo e Contexto
-      description: O que precisa ser entregue e qual requisito do README/PREREGISTRO ele atende?
-    validations:
-      required: true
-  - type: textarea
-    id: acceptance
-    attributes:
-      label: Critérios de Aceite
-      description: Condições objetivas de pronto (testes unitários, segurança, SQL views, build de docs).
-      value: |
-        - [ ] Implementação respeita fronteira do Art. 76 e máquina de 4 estados
-        - [ ] Testes automatizados cobrindo caminho feliz e caso de abstenção (`NAO_AVALIAVEL` / `NAO_APLICAVEL`)
-        - [ ] `ruff check .`, `ruff format --check .`, `mypy .` e `pytest -m "not llm"` passando
-    validations:
-      required: true
-  - type: checkboxes
-    id: guardrails
-    attributes:
-      label: Impacto em Invariantes e Segurança
-      options:
-        - label: Não altera gabarito/manifesto congelado (`data/MANIFEST.sha256`, `gold-v1.csv`)
-          required: false
-        - label: Mantém execução 100% offline sem ferramentas no LLM
-          required: false
+---
+name: Tarefa de sprint
+about: Entrega atribuída a uma pessoa com critérios de aceite verificáveis
+title: "[S?] "
+labels: ""
+assignees: ""
+---
+
+## Entrega
+
+## Planejamento
+
+- Sprint:
+- Responsável:
+- Horas estimadas:
+- Portão:
+- Depende de:
+- Desbloqueia:
+
+## Aceite
+
+- [ ] Resultado verificável descrito.
+- [ ] Evidência anexada ou vinculada.
+- [ ] PR vinculado quando houver mudança no repositório.
